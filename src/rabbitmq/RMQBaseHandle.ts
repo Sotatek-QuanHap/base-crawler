@@ -33,9 +33,9 @@ export class RMQBaseHandle {
   async customerListen() {
     const rs = await this.channel.assertQueue('', { exclusive: false });
     console.log('rs: ', rs);
-    this.channel.bindQueue(rs.queue, this.getQueueName(), '');
+    await this.channel.bindQueue(rs.queue, this.getQueueName(), '');
 
-    this.channel.consume(rs.queue, (msg) => {
+    await this.channel.consume(rs.queue, (msg) => {
       this.handle(msg, this);
     }, { noAck: true });
   }
@@ -53,14 +53,18 @@ export class RMQBaseHandle {
     });
     this.channel.on('close', async () => {
       Store.removeQueue(this.getQueueName());
-      console.log('Channel close');
-      await TimeUtils.sleep(Math.round(Math.random() * 3000 + 3000));
+      this.channel = null;
+      console.log('Channel close', this.getQueueName());
+      await TimeUtils.sleepRandom({ min: 100000 });
       try {
-        this.listen();
+        await this.listen();
       } catch (error) {
-
+        console.log('error at listen');
       }
     });
+    if (!Store.hasChannelQueue(this.getQueueName())) {
+      return;
+    }
     try {
       await this.customerListen();
     } catch (error) {
@@ -91,6 +95,7 @@ export class RMQBaseHandle {
 
   async handleParseError(message: ConsumeMessage, sefl: RMQBaseHandle, error: any) {
     console.log('parse error, ', error);
+    sefl.channel.ack(message);
   }
 
   async process(message: any): Promise<void> {
@@ -99,6 +104,7 @@ export class RMQBaseHandle {
 
   async handleError(message: ConsumeMessage, sefl: RMQBaseHandle, error: any) {
     console.log('has error, ', error);
+    sefl.channel.cancel(message.fields.consumerTag);
   }
 
   async handleSuccess(message: ConsumeMessage, messageParse: any, sefl: RMQBaseHandle) {

@@ -86,8 +86,14 @@ export class Store {
       }
     });
     console.log('res.data: ', res.data);
+    if (!res.data?.stringValue) {
+      console.log('res.data?.stringValue: ', res.data)
+      throw new Error('No data existed');
+    }
 
-    this.grpcs[chain] = (res.data?.data?.stringValue || '').split(',').map((s: string) => s.trim());
+    this.grpcs[chain] = (res.data?.stringValue || '').split(',').map((s: string) => s.trim())
+      .filter((s: string) => s.length);
+    console.log('grpcs: ', chain, this.grpcs);
   }
 
   static async loadCoinMaps(chain: string, isReplace: boolean = false): Promise<void> {
@@ -179,6 +185,7 @@ export class Store {
         const channel = await this.connection.createChannel();
         await channel.assertQueue(queueName, {
           durable: true,
+          maxPriority: 10,
         });
         this.channels[queueName] = channel;
         break;
@@ -212,8 +219,16 @@ export class Store {
   }
 
   static removeQueue(queueName: string) {
-    this.exchanges.delete(queueName);
-    this.channels.delete(queueName);
-    console.log('removeQueue', !!this.exchanges[queueName], !!this.channels[queueName]);
+    delete this.exchanges[queueName];
+    delete this.channels[queueName];
+    console.log('removeQueue', queueName, !!this.exchanges[queueName], !!this.channels[queueName]);
+  }
+
+  static hasChannelQueue(queueName: string) {
+    return !!this.channels[queueName];
+  }
+
+  static hasExchangeQueue(queueName: string) {
+    return !!this.exchanges[queueName];
   }
 }

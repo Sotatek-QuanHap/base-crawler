@@ -1,4 +1,4 @@
-import { BlockWithTransactions, TransactionResponse, Log } from "@ethersproject/abstract-provider";
+import { Block, TransactionResponse, Log } from "@ethersproject/abstract-provider";
 import { Interface, LogDescription, TransactionDescription } from "ethers/lib/utils";
 import { ethers } from "ethers";
 import { ConfigService } from "@nestjs/config";
@@ -10,8 +10,14 @@ export class BaseHandle {
   protected inter: Interface;
   protected configService: ConfigService;
   protected inited: boolean = false;
-  constructor(configService: ConfigService) {
+  protected name: string;
+  constructor(name: string, configService: ConfigService) {
     this.configService = configService;
+    this.name = name;
+  }
+
+  public getName(): string {
+    return this.name;
   }
 
   async loadConfig(): Promise<void> {
@@ -39,53 +45,62 @@ export class BaseHandle {
     this.inter = new ethers.utils.Interface(JSON.stringify(this.abi))
   }
 
-  async handleTransactionParseSuccess(transactionDescription: TransactionDescription, transaction: TransactionResponse, block: BlockWithTransactions): Promise<void> {
-
+  async handleTransactionParseSuccess(transactionDescription: TransactionDescription, transaction: TransactionResponse, block: Block, chainId: number): Promise<boolean> {
+    return false;
   }
 
-  async handleTransactionProcessError(error: any, transactionDescription: TransactionDescription, transaction: TransactionResponse, block: BlockWithTransactions): Promise<void> {
+  async handleTransactionProcessError(error: any, transactionDescription: TransactionDescription, transaction: TransactionResponse, block: Block, chainId: number): Promise<boolean> {
+    return false;
   }
 
-  async handleTransactionParseError(error: any, transaction: TransactionResponse, block: BlockWithTransactions): Promise<void> {
+  async handleTransactionParseError(error: any, transaction: TransactionResponse, block: Block, chainId: number): Promise<boolean> {
+    return false;
   }
 
-  async processTransaction(transaction: TransactionResponse, block: BlockWithTransactions): Promise<boolean> {
+  async processTransaction(transaction: TransactionResponse, block: Block, chainId: number): Promise<boolean> {
     try {
       const transactionDescription = this.inter.parseTransaction(transaction);
       try {
-        await this.handleTransactionParseSuccess(transactionDescription, transaction, block);
+        return await this.handleTransactionParseSuccess(transactionDescription, transaction, block, chainId);
       } catch (errorHandle) {
-        await this.handleTransactionProcessError(errorHandle, transactionDescription, transaction, block);
+        return await this.handleTransactionProcessError(errorHandle, transactionDescription, transaction, block, chainId);
       }
     } catch (error) {
-      await this.handleTransactionParseError(error, transaction, block);
+      return await this.handleTransactionParseError(error, transaction, block, chainId);
     }
-    return false;
   }
 
-  async processLog(log: Log, transaction: TransactionResponse, block: BlockWithTransactions): Promise<boolean> {
+  async processLog(log: Log, transaction: TransactionResponse, block: Block, sumary: any = {}, chainId: number): Promise<boolean> {
+    // sumary[this.getName()].count = (sumary.count || 0) + 1;
+    sumary[this.getName()] = sumary[this.getName()] || {};
     try {
       const logDescription = this.inter.parseLog(log);
+      sumary[this.getName()].total = (sumary[this.getName()].total || 0) + 1;
       try {
-        await this.handleLogParseSuccess(logDescription, log, transaction, block);
+        const isBreak = await this.handleLogParseSuccess(logDescription, log, transaction, block, chainId);
+        sumary[this.getName()].success = (sumary[this.getName()].success || 0) + 1;
+        return isBreak;
       } catch (errorHandle) {
-        await this.handleLogProcessError(errorHandle, logDescription, log, transaction, block);
+        // sumary[this.getName()].processError = (sumary.processError || 0) + 1;
+        return await this.handleLogProcessError(errorHandle, logDescription, log, transaction, block, chainId);
       }
     } catch (error) {
-      await this.handleLogParseError(error, log, transaction, block);
+      // sumary[this.getName()].parseError = (sumary.parseError || 0) + 1;
+      return await this.handleLogParseError(error, log, transaction, block, chainId);
     }
+  }
+
+  async handleLogParseSuccess(logDescription: LogDescription, log: Log, transaction: TransactionResponse, block: Block, chainId: number): Promise<boolean> {
     return false;
   }
 
-  async handleLogParseSuccess(logDescription: LogDescription, log: Log, transaction: TransactionResponse, block: BlockWithTransactions): Promise<void> {
-
-  }
-
-  async handleLogProcessError(error: any, logDescription: LogDescription, log: Log, transaction: TransactionResponse, block: BlockWithTransactions): Promise<void> {
+  async handleLogProcessError(error: any, logDescription: LogDescription, log: Log, transaction: TransactionResponse, block: Block, chainId: number): Promise<boolean> {
     // console.log('parse error ', logDescription);
+    return false;
   }
 
-  async handleLogParseError(error: any, log: Log, transaction: TransactionResponse, block: BlockWithTransactions): Promise<void> {
+  async handleLogParseError(error: any, log: Log, transaction: TransactionResponse, block: Block, chainId: number): Promise<boolean> {
     // console.log('handleLogParseError: ', error, log);
+    return false;
   }
 }

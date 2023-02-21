@@ -1,12 +1,15 @@
 import { ConfigService } from "@nestjs/config";
 import { ConsumeMessage } from "amqplib";
 import { ethers } from "ethers";
-import { ConfigCrawlerService } from "src/common/configCrawlerService/configCrawler.service";
+// import { ConfigCrawlerService } from "src/common/configCrawlerService/configCrawler.service";
 import { RMQBaseHandle } from "src/rabbitmq/RMQBaseHandle";
 import { Store } from "src/rabbitmq/store";
 import { TimeUtils } from "src/utils/time.utils";
 import { BaseHandle } from "./base.handle";
-import { BlockWithTransactions } from '@ethersproject/abstract-provider';
+import { Block } from '@ethersproject/abstract-provider';
+import { InjectModel } from "@nestjs/mongoose";
+import { CrawlerInfo, CrawlerInfoDocument } from "src/common/database/crawler.schema";
+import { Model } from "mongoose";
 
 export class BaseJob extends RMQBaseHandle {
   protected provider: ethers.providers.JsonRpcProvider;
@@ -16,18 +19,30 @@ export class BaseJob extends RMQBaseHandle {
   protected grpcIndex: number = 0;
   protected countRetry: number = 0;
   protected lastNumberKey: string;
-  protected configCrawlerService: ConfigCrawlerService;
+  protected crawlerInfoModel: Model<CrawlerInfoDocument>;
+  // protected configCrawlerService: ConfigCrawlerService;
   protected handles: Array<BaseHandle> = [];
-  constructor(configCrawlerService: ConfigCrawlerService, configService: ConfigService) {
+  constructor(configService: ConfigService, @InjectModel(CrawlerInfo.name) crawlerInfoModel: Model<CrawlerInfoDocument>) {
     super(configService);
-    this.configCrawlerService = configCrawlerService;
+    this.crawlerInfoModel = crawlerInfoModel;
+    // this.configCrawlerService = configCrawlerService;
   };
 
   async init() {
     console.log('init at ', this.chain);
-    await Store.loadGrpcs(this.chain);
-    await Store.loadCoinMaps(this.chain);
-    await this.loadProvider();
+    while (true) {
+      try {
+        await Store.loadGrpcs(this.chain);
+        break;
+      } catch (error) {
+        await TimeUtils.sleepRandom();
+      }
+    }
+    try {
+      await this.loadProvider();
+    } catch (error) {
+      console.log('has error at load privider')
+    }
     for (const handle of this.handles) {
       handle.chain = this.chain;
       await handle.initHandle();
@@ -54,8 +69,8 @@ export class BaseJob extends RMQBaseHandle {
   }
 
   async customerListen() {
-    this.channel.prefetch(this.getNumberMessageLimit(), false);
-    this.channel.consume(this.getQueueName(), (msg) => {
+    await this.channel.prefetch(this.getNumberMessageLimit(), false);
+    await this.channel.consume(this.getQueueName(), (msg) => {
       this.handle(msg, this);
     }, { noAck: false });
   }
@@ -74,7 +89,8 @@ export class BaseJob extends RMQBaseHandle {
         this.grpcIndex = 0;
       }
 
-      if (this.grpcIndex >= grpcs.length) {
+      if (this.grpcIndex >= grpcs.length || this.countRetry > 10) {
+        console.log('grps: ', grpcs, this.grpcIndex, this.countRetry);
         Store.sendToQueue(this.configService.get(`QUEUE_ERROR_MESSAGE`.toUpperCase(), `error-message`),
           Buffer.from(JSON.stringify({
             source: 'load-grpc',
@@ -84,13 +100,15 @@ export class BaseJob extends RMQBaseHandle {
           })),
           this.configService);
         try {
-          this.channel.close();
-          return;
+          console.log('this.channel ', (this.channel != null))
+          await this.channel.close();
+
         } catch (error) {
           console.log('error: ', error);
           await TimeUtils.sleepRandom();
-          continue;
+
         }
+        throw { message: 'Cannot load provider' };
 
       }
       console.log(`load grpc of ${this.chain}`, grpcs, grpcs[this.grpcIndex])
@@ -147,40 +165,47 @@ export class BaseJob extends RMQBaseHandle {
     console.log('number block: ', numberBlock)
     if (!numberBlock)
       return;
-    const block = await this.requestBlockChain<BlockWithTransactions>('getBlockWithTransactions', numberBlock);
+    // this.provider.getBlock(numberBlock);
+    const block = await this.requestBlockChain<Block>('getBlock', numberBlock);
+
     if (block == null) {
       console.log('block is null')
       return;
     }
-    for (const transaction of block.transactions) {
-      for (const handle of self.handles) {
-        const isBreak = await handle.processTransaction(transaction, block);
-        if (isBreak) {
-          break;
-        }
-      }
-    }
+    // for (const transaction of block.transactions) {
+    //   for (const handle of self.handles) {
+    //     const isBreak = await handle.processTransaction(transaction, block);
+    //     if (isBreak) {
+    //       break;
+    //     }
+    //   }
+    // }
     const start = Date.now();
+
     const logs = await this.getLogs(block.hash);
     console.log(`Load logs: `, (Date.now() - start));
+    const sumary = {} as any;
     for (const log of logs) {
       for (const handle of self.handles) {
-        const isBreak = await handle.processLog(log, undefined, block);
+        const isBreak = await handle.processLog(log, undefined, block, sumary, this.network?.chainId);
         if (isBreak) {
           break;
         }
       }
     }
-    // setTimeout(self.run, 3000, self);
-  }
-  async handleError(message: ConsumeMessage, sefl: RMQBaseHandle, error: any) {
-    // console.log('has error, ', error);
+
+    //save blockchain
     try {
-      // sefl.channel.sendToQueue(sefl.queueName, Buffer.from(message.content));
-      sefl.channel.ack(message);
+      console.log('sumary: ', sumary);
+      await this.crawlerInfoModel.findOneAndUpdate(
+        { chainId: this.provider.network.chainId, block: numberBlock },
+        { chainId: this.provider.network.chainId, block: numberBlock, chain: this.chain, timestamp: Date.now(), total: logs.length, sumaries: sumary },
+        { upsert: true });
     } catch (error) {
 
     }
+
+    // setTimeout(self.run, 3000, self);
   }
 
   async handleSuccess(message: ConsumeMessage, messageParse: any, sefl: RMQBaseHandle) {

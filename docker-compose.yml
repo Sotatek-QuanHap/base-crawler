@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb-helix
+    restart: always
+    ports:
+      - 27156:27017
+    volumes:
+      - ./data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=helix
+      - MONGO_INITDB_ROOT_PASSWORD=helix
+    command: --quiet
