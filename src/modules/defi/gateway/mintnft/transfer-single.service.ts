@@ -14,7 +14,7 @@ export class TransferSingleService extends BaseService<TransferSingleDocument> {
     super(
       configService,
       configService.get<string>('queue_transfer_single'.toLocaleLowerCase(), 'transfer-single'),
-      configService.get<string>('queue_transfer_single'.toLocaleLowerCase(), 'transfer-single-callback'),
+      configService.get<string>('queue_transfer_single_callback'.toLocaleLowerCase(), 'transfer-single-callback'),
       transferSingleModel
     );
   }
