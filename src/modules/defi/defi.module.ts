@@ -4,11 +4,12 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { ShareModule } from "src/common/share.module";
 import { EthereumJob } from "./chains/ethereum/crawler.ethereum.job";
 import { CreateLoanEthereumHandle } from "./chains/ethereum/handles/create-loan.ethereum.handle";
+import { LinkProxyEthereumHandle } from "./chains/ethereum/handles/link-proxy.ethereum.handle";
 import { TransferSingleEthereumHandle } from "./chains/ethereum/handles/transfer-single.ethereum.handle";
 import { GatewayModule } from "./gateway/gateway.module";
 @Module({
   imports: [ShareModule, GatewayModule,],
-  providers: [ConfigService, EthereumJob, TransferSingleEthereumHandle, CreateLoanEthereumHandle],
+  providers: [ConfigService, EthereumJob, TransferSingleEthereumHandle, CreateLoanEthereumHandle, LinkProxyEthereumHandle],
   exports: [],
 })
 export class DefiModule {
