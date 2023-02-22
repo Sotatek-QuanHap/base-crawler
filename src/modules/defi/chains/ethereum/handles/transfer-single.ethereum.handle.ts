@@ -8,15 +8,15 @@ import TransferABI from "./transfer.abi.json";
 export class TransferSingleEthereumHandle extends TransferSingleBaseHandle {
   protected logNames: string[];
   protected service: BaseService<any>;
-  protected mappings = [
-    { key: 'operator', convert: undefined },
-    { key: 'from', convert: undefined },
-    { key: 'to', convert: undefined },
-    { key: 'id', convert: undefined },
-    { key: 'value', convert: undefined },
-  ];
   constructor(configService: ConfigService, service: TransferSingleService) {
     super('TransferSingle', configService, service);
+    this.mappings = [
+      { key: 'operator', convert: undefined },
+      { key: 'from', convert: undefined },
+      { key: 'to', convert: undefined },
+      { key: 'id', convert: undefined },
+      { key: 'value', convert: undefined },
+    ];
     this.abi = TransferABI;
   }
 }

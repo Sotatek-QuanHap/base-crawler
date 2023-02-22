@@ -17,14 +17,14 @@ export class TransferSingleBaseHandle extends BaseHandle {
     { key: 'id', convert: undefined },
     { key: 'value', convert: undefined },
   ];
-  constructor(name: string, configService: ConfigService, service: TransferSingleService) {
+  constructor(name: string, configService: ConfigService, service: any) {
     super(name, configService);
     this.service = service;
     this.logNames = ['TransferSingle'];
   }
 
   async handleLogParseSuccess(logDescription: LogDescription, log: Log, transaction: TransactionResponse, block: Block, chainId: number): Promise<boolean> {
-    // console.log('handle log parse success of ' + this.chain, logDescription, log);
+    // console.log('handle log parse success of ' + this.chain, logDescription, log, this.logNames);
     if (this.logNames.includes(logDescription.name)) {
       //Save to database
       const data = {} as any;

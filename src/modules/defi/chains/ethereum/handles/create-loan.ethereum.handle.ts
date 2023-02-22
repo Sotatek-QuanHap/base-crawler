@@ -2,19 +2,20 @@ import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { BaseService } from "src/rabbitmq/base.service";
 import { TransferSingleBaseHandle } from "src/modules/defi/handles/transfer-single.base.handle";
-import { TransferSingleService } from "src/modules/defi/gateway/mintnft/transfer-single.service";
-import FactoryABI from './factory.abi.json'
+import PoolCreatedABI from './create-loan.json'
+import { CreateLoanService } from "src/modules/defi/gateway/createloan/create-loan.service";
 @Injectable()
 export class CreateLoanEthereumHandle extends TransferSingleBaseHandle {
   protected logNames: string[];
   protected service: BaseService<any>;
-  protected mappings = [
-    { key: 'pool', convert: undefined },
-    { key: 'borrower', convert: undefined },
-  ];
-  constructor(configService: ConfigService, service: TransferSingleService) {
+
+  constructor(configService: ConfigService, service: CreateLoanService) {
     super('PoolCreated', configService, service);
-    this.abi = FactoryABI;
+    this.abi = PoolCreatedABI;
+    this.mappings = [
+      { key: 'pool', convert: undefined },
+      { key: 'borrower', convert: undefined },
+    ];
     this.logNames = ['PoolCreated'];
   }
 }
