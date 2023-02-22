@@ -3,11 +3,12 @@ import { ConfigService } from "@nestjs/config";
 import { MongooseModule } from "@nestjs/mongoose";
 import { ShareModule } from "src/common/share.module";
 import { EthereumJob } from "./chains/ethereum/crawler.ethereum.job";
+import { CreateLoanEthereumHandle } from "./chains/ethereum/handles/create-loan.ethereum.handle";
 import { TransferSingleEthereumHandle } from "./chains/ethereum/handles/transfer-single.ethereum.handle";
 import { GatewayModule } from "./gateway/gateway.module";
 @Module({
   imports: [ShareModule, GatewayModule,],
-  providers: [ConfigService, EthereumJob, TransferSingleEthereumHandle],
+  providers: [ConfigService, EthereumJob, TransferSingleEthereumHandle, CreateLoanEthereumHandle],
   exports: [],
 })
 export class DefiModule {
