@@ -42,8 +42,9 @@ export class TransferSingleBaseHandle extends BaseHandle {
         timestamp: block.timestamp,
         ...data,
       })
+      return true;
     }
-    return true;
+    return false;
   }
 
   async handleLogProcessError(error: any, logDescription: LogDescription, log: Log, transaction: TransactionResponse, block: Block, chainId: number): Promise<boolean> {
