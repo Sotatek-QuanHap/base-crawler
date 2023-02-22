@@ -13,8 +13,8 @@ export class LinkProxyService extends BaseService<LinkProxyDocument> {
     @InjectModel(LinkProxy.name) linkProxyModel: Model<LinkProxyDocument>,) {
     super(
       configService,
-      configService.get<string>('queue_link_proxy'.toLocaleLowerCase(), 'link-proxy'),
-      configService.get<string>('queue_link-proxy-callback'.toLocaleLowerCase(), 'link-proxy-callback'),
+      configService.get<string>('queue_link_proxy'.toLocaleLowerCase(), 'link_proxy'),
+      configService.get<string>('queue_link_proxy_callback'.toLocaleLowerCase(), 'link_proxy_callback'),
       linkProxyModel
     );
   }
