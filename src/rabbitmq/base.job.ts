@@ -56,6 +56,7 @@ export class BaseJob extends RMQBaseHandle {
 
   getNumberMessageLimit(): number {
     this.numberMessageLimit = +this.configService.get(`NUMBER_MESSAGE_REQUEST_OF_${this.chain}`.toUpperCase(), '0');
+    console.log('getNumberMessageLimit of ' + this.chain);
     return this.numberMessageLimit;
   }
 
