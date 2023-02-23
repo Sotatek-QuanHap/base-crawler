@@ -106,7 +106,13 @@ export class RMQBaseHandle {
 
   async handleError(message: ConsumeMessage, sefl: RMQBaseHandle, error: any) {
     console.log('has error, ', error);
-    sefl.channel.cancel(message.fields.consumerTag);
+    if (!sefl.channel)
+      return;
+    try {
+      await sefl.channel.cancel(message.fields.consumerTag);
+    } catch (error) {
+
+    }
   }
 
   async handleSuccess(message: ConsumeMessage, messageParse: any, sefl: RMQBaseHandle) {
