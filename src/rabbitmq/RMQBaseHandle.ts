@@ -73,10 +73,10 @@ export class RMQBaseHandle {
   }
 
   async handle(body: ConsumeMessage, sefl: RMQBaseHandle): Promise<void> {
-    console.log('handle at ' + this.getQueueName(), sefl.getQueueName());
+    // console.log('handle at ' + this.getQueueName(), sefl.getQueueName());
     if (!body)
       return;
-    let message;
+    let message: any;
     try {
       message = await sefl.parseObject(body);
     } catch (error) {
