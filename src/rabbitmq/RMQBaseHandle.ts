@@ -84,7 +84,7 @@ export class RMQBaseHandle {
     }
     try {
       await sefl.process(message);
-      console.log('self: ', sefl.getQueueName());
+      // console.log('self: ', sefl.getQueueName());
       sefl.handleSuccess(body, message, sefl);
     } catch (error) {
       sefl.handleError(body, sefl, error);
@@ -116,6 +116,6 @@ export class RMQBaseHandle {
   }
 
   async handleSuccess(message: ConsumeMessage, messageParse: any, sefl: RMQBaseHandle) {
-    console.log('handle success: ', sefl.getQueueName());
+    // console.log('handle success: ', sefl.getQueueName());
   }
 }
