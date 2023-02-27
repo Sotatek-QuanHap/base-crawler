@@ -17,7 +17,7 @@ export abstract class BaseService<T> {
 
   async processCreate(data: any): Promise<any> {
     console.log('process create: ', data);
-    return await this.model.create(data);
+    return await this.model.findOneAndUpdate({ chain: data.chain, hash: data.hash, logIndex: data.logIndex }, data, { upsert: true, new: true });
   }
 
   async create(data: any) {
