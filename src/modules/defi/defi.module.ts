@@ -6,10 +6,11 @@ import { EthereumJob } from "./chains/ethereum/crawler.ethereum.job";
 import { CreateLoanEthereumHandle } from "./chains/ethereum/handles/create-loan.ethereum.handle";
 import { LinkProxyEthereumHandle } from "./chains/ethereum/handles/link-proxy.ethereum.handle";
 import { TransferSingleEthereumHandle } from "./chains/ethereum/handles/transfer-single.ethereum.handle";
+import { WithdrawEthereumHandle } from "./chains/ethereum/handles/withdraw-loan.ethereum.handle";
 import { GatewayModule } from "./gateway/gateway.module";
 @Module({
   imports: [ShareModule, GatewayModule,],
-  providers: [ConfigService, EthereumJob, TransferSingleEthereumHandle, CreateLoanEthereumHandle, LinkProxyEthereumHandle],
+  providers: [ConfigService, EthereumJob, TransferSingleEthereumHandle, CreateLoanEthereumHandle, LinkProxyEthereumHandle, WithdrawEthereumHandle],
   exports: [],
 })
 export class DefiModule {
