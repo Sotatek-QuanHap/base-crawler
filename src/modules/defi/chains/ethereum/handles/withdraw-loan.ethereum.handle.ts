@@ -6,9 +6,6 @@ import WithdrawABI from "./withdraw-loan.abi.json";
 import { WithdrawService } from "src/modules/defi/gateway/withdraw/withdraw-loan.service";
 @Injectable()
 export class WithdrawEthereumHandle extends TransferSingleBaseHandle {
-  protected logNames: string[];
-  protected service: BaseService<any>;
-
   constructor(configService: ConfigService, service: WithdrawService) {
     super('WithdrawalMade', configService, service);
     this.abi = WithdrawABI;
