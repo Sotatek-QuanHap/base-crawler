@@ -14,6 +14,9 @@ import { LinkProxyListener } from "./proxy/link-proxy.listener";
 import { LinkProxy, LinkProxySchema } from "./proxy/link-proxy.schema";
 import { LinkProxyService } from "./proxy/link-proxy.service";
 import { WithdrawService } from './withdraw/withdraw-loan.service';
+import { Invest, InvestSchema } from './invest/invest.schema';
+import { InvestService } from './invest/invest.service';
+import { InvestListener } from './invest/invest.listener';
 
 @Module({
   imports: [ShareModule,
@@ -22,9 +25,10 @@ import { WithdrawService } from './withdraw/withdraw-loan.service';
       { name: CreateLoan.name, schema: CreateLoanSchema },
       { name: LinkProxy.name, schema: LinkProxySchema },
       { name: Withdraw.name, schema: WithdrawSchema },
+      {name: Invest.name, schema: InvestSchema}
     ]),],
-  providers: [ConfigService, TransferSingleService, TransferSingleListener, CreateLoanService, CreateLoanListener, LinkProxyService, LinkProxyListener, WithdrawService, WithdrawListener],
-  exports: [TransferSingleService, CreateLoanService, LinkProxyService, WithdrawService],
+  providers: [ConfigService, TransferSingleService, TransferSingleListener, CreateLoanService, CreateLoanListener, LinkProxyService, LinkProxyListener, WithdrawService, WithdrawListener,InvestService, InvestListener],
+  exports: [TransferSingleService, CreateLoanService, LinkProxyService, WithdrawService, InvestService],
 })
 export class GatewayModule {
   // constructor(private transferSingleListener: TransferSingleListener) {
