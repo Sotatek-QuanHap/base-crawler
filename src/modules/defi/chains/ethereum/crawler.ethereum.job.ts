@@ -8,6 +8,7 @@ import { BaseJob } from "src/rabbitmq/base.job";
 import { CreateLoanEthereumHandle } from "./handles/create-loan.ethereum.handle";
 import { LinkProxyEthereumHandle } from "./handles/link-proxy.ethereum.handle";
 import { TransferSingleEthereumHandle } from "./handles/transfer-single.ethereum.handle";
+import { InvestEthereumHandle } from './handles/invest.ethereum.handle';
 
 @Injectable()
 export class EthereumJob extends BaseJob {
@@ -18,6 +19,7 @@ export class EthereumJob extends BaseJob {
     private createLoanEthereumHandle: CreateLoanEthereumHandle,
     private linkProxyEthereumHandle: LinkProxyEthereumHandle,
     private withdrawEthereumHandle: WithdrawEthereumHandle,
+    private InvestHandle: InvestEthereumHandle
   ) {
     super(configService, crawlerInfoModel);
     this.chain = 'ethereum';
@@ -26,6 +28,7 @@ export class EthereumJob extends BaseJob {
       this.createLoanEthereumHandle,
       this.linkProxyEthereumHandle,
       this.withdrawEthereumHandle,
+      this.InvestHandle,
     ];
   }
 }
