@@ -9,6 +9,7 @@ import { CreateLoanEthereumHandle } from "./handles/create-loan.ethereum.handle"
 import { LinkProxyEthereumHandle } from "./handles/link-proxy.ethereum.handle";
 import { TransferSingleEthereumHandle } from "./handles/transfer-single.ethereum.handle";
 import { InvestEthereumHandle } from './handles/invest.ethereum.handle';
+import { CreateTrancheEthereumHandle } from './handles/create-tranche.ethereum.handle';
 
 @Injectable()
 export class EthereumJob extends BaseJob {
@@ -19,7 +20,8 @@ export class EthereumJob extends BaseJob {
     private createLoanEthereumHandle: CreateLoanEthereumHandle,
     private linkProxyEthereumHandle: LinkProxyEthereumHandle,
     private withdrawEthereumHandle: WithdrawEthereumHandle,
-    private InvestHandle: InvestEthereumHandle
+    private InvestHandle: InvestEthereumHandle,
+    private createTrancheHandle: CreateTrancheEthereumHandle,
   ) {
     super(configService, crawlerInfoModel);
     this.chain = 'ethereum';
@@ -29,6 +31,7 @@ export class EthereumJob extends BaseJob {
       this.linkProxyEthereumHandle,
       this.withdrawEthereumHandle,
       this.InvestHandle,
+      this.createTrancheHandle,
     ];
   }
 }
