@@ -15,7 +15,6 @@ export class DrawdownEthereumHandle extends TransferSingleBaseHandle {
     this.mappings = [
       { key: 'borrower', convert: undefined },
       { key: 'amount', convert: undefined },
-      { key: 'to', convert: undefined },
     ];
     this.logNames = ['DrawdownMade'];
   }
