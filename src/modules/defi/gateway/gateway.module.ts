@@ -67,6 +67,7 @@ import { Drawdown, DrawdownSchema } from './drawdown/drawdown.schema';
     WithdrawService,
     DrawdownService,
     InvestService,
+    CreateTrancheService,
   ],
 })
 export class GatewayModule {
