@@ -17,6 +17,9 @@ import { WithdrawService } from './withdraw/withdraw-loan.service';
 import { Invest, InvestSchema } from './invest/invest.schema';
 import { InvestService } from './invest/invest.service';
 import { InvestListener } from './invest/invest.listener';
+import { CreateTranche, CreateTrancheSchema } from './createtranche/create-tranche.schema';
+import { CreateTrancheService } from './createtranche/create-tranche.service';
+import { CreateTrancheListener } from './createtranche/create-tranche.listener';
 
 @Module({
   imports: [ShareModule,
@@ -25,10 +28,11 @@ import { InvestListener } from './invest/invest.listener';
       { name: CreateLoan.name, schema: CreateLoanSchema },
       { name: LinkProxy.name, schema: LinkProxySchema },
       { name: Withdraw.name, schema: WithdrawSchema },
-      {name: Invest.name, schema: InvestSchema}
+      { name: Invest.name, schema: InvestSchema },
+      { name: CreateTranche.name, schema: CreateTrancheSchema}, 
     ]),],
-  providers: [ConfigService, TransferSingleService, TransferSingleListener, CreateLoanService, CreateLoanListener, LinkProxyService, LinkProxyListener, WithdrawService, WithdrawListener,InvestService, InvestListener],
-  exports: [TransferSingleService, CreateLoanService, LinkProxyService, WithdrawService, InvestService],
+  providers: [ConfigService, TransferSingleService, TransferSingleListener, CreateLoanService, CreateLoanListener, LinkProxyService, LinkProxyListener, WithdrawService, WithdrawListener,InvestService, InvestListener, CreateTrancheService, CreateTrancheListener, ],
+  exports: [TransferSingleService, CreateLoanService, LinkProxyService, WithdrawService, InvestService, CreateTrancheService, ],
 })
 export class GatewayModule {
   // constructor(private transferSingleListener: TransferSingleListener) {

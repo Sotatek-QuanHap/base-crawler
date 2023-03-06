@@ -1,0 +1,21 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "junior",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "senior",
+        "type": "address"
+      }
+    ],
+    "name": "TranchesCreated",
+    "type": "event"
+  }
+]
