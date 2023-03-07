@@ -13,7 +13,7 @@ export class Invest extends BaseSchema {
   tranche: string;
 
   @Prop({})
-  trancheId: string;
+  trancheId: number;
 
   @Prop({ lowercase: true })
   amount: string;
