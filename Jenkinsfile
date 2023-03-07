@@ -44,7 +44,7 @@ pipeline {
           env.COMMIT_HASH = sh(script:'git rev-parse --short=8 HEAD', returnStdout: true).trim()
           sh 'if [ -d /opt/helix-infra ]; then rm -Rf /opt/helix-infra; fi'
           sh "git clone --single-branch --branch dev https://${INFRA_ACCESS_TOKEN}@github.com/helilabs/helix-infra.git /opt/helix-infra"
-          sh 'sed -i "s/latest/${COMMIT_HASH}/g" /opt/helix-infra/modules/ecs-crawler/ecs-with-scale.tf'
+          sh 'sed -i "s/latest/${COMMIT_HASH}/g" /opt/helix-infra/modules/ecs-crawler/ecs-without-scale.tf'
           sh 'terraform -chdir=/opt/helix-infra/ init'
           sh 'terraform -chdir=/opt/helix-infra/ apply -auto-approve -target=module.ecs_crawler'
         }
