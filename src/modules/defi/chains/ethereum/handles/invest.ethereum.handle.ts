@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { BaseService } from 'src/rabbitmq/base.service';
-import InvestABI from './invest.abi.json';
+import InvestABI from './abis/invest.abi.json';
 import { TransferSingleBaseHandle } from 'src/modules/defi/handles/transfer-single.base.handle';
 import { InvestService } from 'src/modules/defi/gateway/invest/invest.service';
 @Injectable()
