@@ -29,6 +29,9 @@ import { CreateTrancheListener } from './createtranche/create-tranche.listener';
 import { DrawdownService } from './drawdown/drawdown.service';
 import { DrawdownListener } from './drawdown/drawdown.listener';
 import { Drawdown, DrawdownSchema } from './drawdown/drawdown.schema';
+import { CancelLoan, CancelLoanSchema } from './cancel-loan/cancel-loan.schema';
+import { CancelLoanListener } from './cancel-loan/cancel-loan.listener';
+import { CancelLoanService } from './cancel-loan/cancel-loan.service';
 
 @Module({
   imports: [
@@ -41,6 +44,7 @@ import { Drawdown, DrawdownSchema } from './drawdown/drawdown.schema';
       { name: Drawdown.name, schema: DrawdownSchema },
       { name: Invest.name, schema: InvestSchema },
       { name: CreateTranche.name, schema: CreateTrancheSchema },
+      { name: CancelLoan.name, schema: CancelLoanSchema },
     ]),
   ],
   providers: [
@@ -59,6 +63,8 @@ import { Drawdown, DrawdownSchema } from './drawdown/drawdown.schema';
     InvestListener,
     CreateTrancheListener,
     CreateTrancheService,
+    CancelLoanListener,
+    CancelLoanService,
   ],
   exports: [
     TransferSingleService,
@@ -68,6 +74,7 @@ import { Drawdown, DrawdownSchema } from './drawdown/drawdown.schema';
     DrawdownService,
     InvestService,
     CreateTrancheService,
+    CancelLoanService,
   ],
 })
 export class GatewayModule {
