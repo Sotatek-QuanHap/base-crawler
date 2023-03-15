@@ -1,9 +1,9 @@
-import { Injectable } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
-import { BaseService } from "src/rabbitmq/base.service";
-import { TransferSingleBaseHandle } from "src/modules/defi/handles/transfer-single.base.handle";
-import { TransferSingleService } from "src/modules/defi/gateway/mintnft/transfer-single.service";
-import TransferABI from "./transfer.abi.json";
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { BaseService } from 'src/rabbitmq/base.service';
+import { TransferSingleBaseHandle } from 'src/modules/defi/handles/transfer-single.base.handle';
+import { TransferSingleService } from 'src/modules/defi/gateway/mintnft/transfer-single.service';
+import TransferABI from './abis/transfer.abi.json';
 @Injectable()
 export class TransferSingleEthereumHandle extends TransferSingleBaseHandle {
   protected logNames: string[];

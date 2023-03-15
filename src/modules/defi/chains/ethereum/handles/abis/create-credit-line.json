@@ -1,0 +1,15 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "creditLine",
+        "type": "address"
+      }
+    ],
+    "name": "CreditLineCreated",
+    "type": "event"
+  }
+]

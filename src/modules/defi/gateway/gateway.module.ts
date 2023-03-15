@@ -32,6 +32,12 @@ import { Drawdown, DrawdownSchema } from './drawdown/drawdown.schema';
 import { CancelLoan, CancelLoanSchema } from './cancel-loan/cancel-loan.schema';
 import { CancelLoanListener } from './cancel-loan/cancel-loan.listener';
 import { CancelLoanService } from './cancel-loan/cancel-loan.service';
+import {
+  CreateCreditLine,
+  CreateCreditLineSchema,
+} from './create-credit-line/create-credit-line.schema';
+import { CreateCreditLineService } from './create-credit-line/create-credit-line.service';
+import { CreateCreditLineListener } from './create-credit-line/create-credit-line.listener';
 
 @Module({
   imports: [
@@ -45,6 +51,7 @@ import { CancelLoanService } from './cancel-loan/cancel-loan.service';
       { name: Invest.name, schema: InvestSchema },
       { name: CreateTranche.name, schema: CreateTrancheSchema },
       { name: CancelLoan.name, schema: CancelLoanSchema },
+      { name: CreateCreditLine.name, schema: CreateCreditLineSchema },
     ]),
   ],
   providers: [
@@ -65,6 +72,8 @@ import { CancelLoanService } from './cancel-loan/cancel-loan.service';
     CreateTrancheService,
     CancelLoanListener,
     CancelLoanService,
+    CreateCreditLineService,
+    CreateCreditLineListener,
   ],
   exports: [
     TransferSingleService,
@@ -75,6 +84,7 @@ import { CancelLoanService } from './cancel-loan/cancel-loan.service';
     InvestService,
     CreateTrancheService,
     CancelLoanService,
+    CreateCreditLineService,
   ],
 })
 export class GatewayModule {
