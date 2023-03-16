@@ -5,10 +5,7 @@ import { TransferSingleBaseHandle } from 'src/modules/defi/handles/transfer-sing
 import CancelLoanABI from './abis/cancel-loan.json';
 import { CancelLoanService } from 'src/modules/defi/gateway/cancel-loan/cancel-loan.service';
 @Injectable()
-export class CreateLoanEthereumHandle extends TransferSingleBaseHandle {
-  protected logNames: string[];
-  protected service: BaseService<any>;
-
+export class CancelLoanEthereumHandle extends TransferSingleBaseHandle {
   constructor(configService: ConfigService, service: CancelLoanService) {
     super('PoolCancelled', configService, service);
     this.abi = CancelLoanABI;
