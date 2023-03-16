@@ -11,6 +11,7 @@ import { DrawdownEthereumHandle } from './chains/ethereum/handles/drawdown.ether
 import { InvestEthereumHandle } from './chains/ethereum/handles/invest.ethereum.handle';
 import { CreateTrancheEthereumHandle } from './chains/ethereum/handles/create-tranche.ethereum.handle';
 import { CreateCreditLineHandle } from './chains/ethereum/handles/create-credit-line.ethereum.handle';
+import { CancelLoanEthereumHandle } from './chains/ethereum/handles/cancel-loan.ethereum.handle';
 @Module({
   imports: [ShareModule, GatewayModule],
   providers: [
@@ -24,6 +25,7 @@ import { CreateCreditLineHandle } from './chains/ethereum/handles/create-credit-
     InvestEthereumHandle,
     CreateTrancheEthereumHandle,
     CreateCreditLineHandle,
+    CancelLoanEthereumHandle,
   ],
   exports: [],
 })

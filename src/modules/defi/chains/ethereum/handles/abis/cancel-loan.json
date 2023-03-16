@@ -1,1 +1,8 @@
-[{ "anonymous": false, "inputs": [], "name": "PoolCancelled", "type": "event" }]
+[
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "PoolCancelled",
+    "type": "event"
+  }
+]
