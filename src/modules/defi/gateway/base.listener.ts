@@ -23,7 +23,9 @@ export class BaseListener<T> extends RMQBaseHandle {
   }
 
   async customerListen() {
-    console.log('custom listern at ', this.queueName);
+    console.log('custom listern at ', this.queueName, this.getNumberMessageLimit());
+    if (this.getNumberMessageLimit() < 1)
+      return;
     this.channel.prefetch(this.getNumberMessageLimit(), false);
     this.channel.consume(this.getQueueName(), (msg) => {
       this.handle(msg, this);

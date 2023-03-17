@@ -8,7 +8,7 @@ export class RMQBaseHandle {
   public startAt: string;
   public queueName: string;
   public configService: ConfigService;
-  protected numberMessageLimit: number = 0;
+  protected numberMessageLimit: number = 1;
   constructor(configService: ConfigService) {
     this.configService = configService;
     this.startAt = `${Date.now()}`;

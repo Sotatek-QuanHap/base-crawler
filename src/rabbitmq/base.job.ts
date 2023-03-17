@@ -38,11 +38,7 @@ export class BaseJob extends RMQBaseHandle {
         await TimeUtils.sleepRandom();
       }
     }
-    try {
-      await this.loadProvider();
-    } catch (error) {
-      console.log('has error at load privider')
-    }
+    await this.loadProvider();
     for (const handle of this.handles) {
       handle.chain = this.chain;
       await handle.initHandle();
@@ -100,16 +96,18 @@ export class BaseJob extends RMQBaseHandle {
             message: 'grpcs is empty',
           })),
           this.configService);
-        try {
-          console.log('this.channel ', (this.channel != null))
-          await this.channel.close();
+        await Store.loadGrpcs(this.chain);
+        this.countRetry = 0;
+        // try {
+        //   console.log('this.channel ', (this.channel != null))
+        //   await this.channel.close();
 
-        } catch (error) {
-          console.log('error: ', error);
-          await TimeUtils.sleepRandom();
+        // } catch (error) {
+        //   console.log('error: ', error);
+        //   await TimeUtils.sleepRandom();
 
-        }
-        throw { message: 'Cannot load provider' };
+        // }
+        // throw { message: 'Cannot load provider' };
 
       }
       console.log(`load grpc of ${this.chain}`, grpcs, grpcs[this.grpcIndex])
