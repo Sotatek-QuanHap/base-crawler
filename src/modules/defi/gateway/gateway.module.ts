@@ -38,6 +38,9 @@ import {
 } from './create-credit-line/create-credit-line.schema';
 import { CreateCreditLineService } from './create-credit-line/create-credit-line.service';
 import { CreateCreditLineListener } from './create-credit-line/create-credit-line.listener';
+import { Payment, PaymentSchema } from './payment/payment.schema';
+import { PaymentService } from './payment/payment.service';
+import { PaymentListener } from './payment/payment.listener';
 
 @Module({
   imports: [
@@ -52,6 +55,7 @@ import { CreateCreditLineListener } from './create-credit-line/create-credit-lin
       { name: CreateTranche.name, schema: CreateTrancheSchema },
       { name: CancelLoan.name, schema: CancelLoanSchema },
       { name: CreateCreditLine.name, schema: CreateCreditLineSchema },
+      { name: Payment.name, schema: PaymentSchema },
     ]),
   ],
   providers: [
@@ -74,6 +78,8 @@ import { CreateCreditLineListener } from './create-credit-line/create-credit-lin
     CancelLoanService,
     CreateCreditLineService,
     CreateCreditLineListener,
+    PaymentService,
+    PaymentListener,
   ],
   exports: [
     TransferSingleService,
@@ -85,6 +91,7 @@ import { CreateCreditLineListener } from './create-credit-line/create-credit-lin
     CreateTrancheService,
     CancelLoanService,
     CreateCreditLineService,
+    PaymentService,
   ],
 })
 export class GatewayModule {

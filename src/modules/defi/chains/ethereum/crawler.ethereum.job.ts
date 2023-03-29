@@ -16,6 +16,7 @@ import { CreateTrancheEthereumHandle } from './handles/create-tranche.ethereum.h
 import { DrawdownEthereumHandle } from './handles/drawdown.ethereum.handle';
 import { CreateCreditLineHandle } from './handles/create-credit-line.ethereum.handle';
 import { CancelLoanEthereumHandle } from './handles/cancel-loan.ethereum.handle';
+import { PaymentEthereumHandle } from './handles/payment.ethereum.handle';
 
 @Injectable()
 export class EthereumJob extends BaseJob {
@@ -31,6 +32,7 @@ export class EthereumJob extends BaseJob {
     private drawdownEthereumHandle: DrawdownEthereumHandle,
     private createCreditLineHandle: CreateCreditLineHandle,
     private cancelLoanEthereumHandle: CancelLoanEthereumHandle,
+    private paymentEthereumHandle: PaymentEthereumHandle,
   ) {
     super(configService, crawlerInfoModel);
     this.chain = 'ethereum';
@@ -44,6 +46,7 @@ export class EthereumJob extends BaseJob {
       this.drawdownEthereumHandle,
       this.createCreditLineHandle,
       this.cancelLoanEthereumHandle,
+      this.paymentEthereumHandle,
     ];
   }
 }
