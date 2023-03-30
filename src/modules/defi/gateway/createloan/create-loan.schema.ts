@@ -6,13 +6,14 @@ export type CreateLoanDocument = HydratedDocument<CreateLoan>;
 
 @Schema(dbOptionDefault)
 export class CreateLoan extends BaseSchema {
-
   @Prop({ lowercase: true })
   pool: string;
 
   @Prop({ lowercase: true })
   borrower: string;
 
+  @Prop({ lowercase: true })
+  from: string;
 }
 
 export const CreateLoanSchema = SchemaFactory.createForClass(CreateLoan);
