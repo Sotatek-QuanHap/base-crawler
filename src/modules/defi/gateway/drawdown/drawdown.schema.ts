@@ -10,7 +10,10 @@ export class Drawdown extends BaseSchema {
   borrower: string;
 
   @Prop({ lowercase: true })
-  amount: string;
+  amount: number;
+
+  @Prop({ lowercase: true })
+  from: string;
 }
 
 export const DrawdownSchema = SchemaFactory.createForClass(Drawdown);

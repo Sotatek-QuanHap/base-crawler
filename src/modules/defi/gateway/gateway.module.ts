@@ -41,6 +41,7 @@ import { CreateCreditLineListener } from './create-credit-line/create-credit-lin
 import { Payment, PaymentSchema } from './payment/payment.schema';
 import { PaymentService } from './payment/payment.service';
 import { PaymentListener } from './payment/payment.listener';
+import { loadHash } from './loadHash.service';
 
 @Module({
   imports: [
@@ -80,6 +81,7 @@ import { PaymentListener } from './payment/payment.listener';
     CreateCreditLineListener,
     PaymentService,
     PaymentListener,
+    loadHash,
   ],
   exports: [
     TransferSingleService,

@@ -4,12 +4,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { BaseService } from 'src/rabbitmq/base.service';
 import { Drawdown, DrawdownDocument } from './drawdown.schema';
+import { loadHash } from '../loadHash.service';
 
 @Injectable()
 export class DrawdownService extends BaseService<DrawdownDocument> {
   constructor(
     configService: ConfigService,
     @InjectModel(Drawdown.name) drawdownModel: Model<DrawdownDocument>,
+    private loadHash: loadHash,
   ) {
     super(
       configService,
@@ -23,5 +25,10 @@ export class DrawdownService extends BaseService<DrawdownDocument> {
       ),
       drawdownModel,
     );
+  }
+  async processCreate(data: any): Promise<any> {
+    const rs = await this.loadHash.getTransaction(data.hash);
+    data.from = rs.from;
+    return await super.processCreate(data);
   }
 }
