@@ -11,6 +11,9 @@ export class CreateTranche extends BaseSchema {
 
   @Prop({ lowercase: true })
   senior: string;
+
+  @Prop({ lowercase: true })
+  uni: string;
 }
 
 export const CreateTrancheSchema = SchemaFactory.createForClass(CreateTranche);
