@@ -9,7 +9,8 @@ import { WithdrawEthereumHandle } from './chains/ethereum/handles/withdraw-loan.
 import { GatewayModule } from './gateway/gateway.module';
 import { DrawdownEthereumHandle } from './chains/ethereum/handles/drawdown.ethereum.handle';
 import { InvestEthereumHandle } from './chains/ethereum/handles/invest.ethereum.handle';
-import { CreateTrancheEthereumHandle } from './chains/ethereum/handles/create-tranche.ethereum.handle';
+import { CreateMultiTrancheEthereumHandle } from './chains/ethereum/handles/create-multi-tranche.ethereum.handle';
+import { CreateUniTrancheEthereumHandle } from './chains/ethereum/handles/create-uni-tranche.ethereum.handle';
 import { CreateCreditLineHandle } from './chains/ethereum/handles/create-credit-line.ethereum.handle';
 import { CancelLoanEthereumHandle } from './chains/ethereum/handles/cancel-loan.ethereum.handle';
 import { PaymentEthereumHandle } from './chains/ethereum/handles/payment.ethereum.handle';
@@ -24,7 +25,8 @@ import { PaymentEthereumHandle } from './chains/ethereum/handles/payment.ethereu
     WithdrawEthereumHandle,
     DrawdownEthereumHandle,
     InvestEthereumHandle,
-    CreateTrancheEthereumHandle,
+    CreateMultiTrancheEthereumHandle,
+    CreateUniTrancheEthereumHandle,
     CreateCreditLineHandle,
     CancelLoanEthereumHandle,
     PaymentEthereumHandle,

@@ -12,7 +12,8 @@ import { CreateLoanEthereumHandle } from './handles/create-loan.ethereum.handle'
 import { LinkProxyEthereumHandle } from './handles/link-proxy.ethereum.handle';
 import { TransferSingleEthereumHandle } from './handles/transfer-single.ethereum.handle';
 import { InvestEthereumHandle } from './handles/invest.ethereum.handle';
-import { CreateTrancheEthereumHandle } from './handles/create-tranche.ethereum.handle';
+import { CreateMultiTrancheEthereumHandle } from './handles/create-multi-tranche.ethereum.handle';
+import { CreateUniTrancheEthereumHandle } from './handles/create-uni-tranche.ethereum.handle';
 import { DrawdownEthereumHandle } from './handles/drawdown.ethereum.handle';
 import { CreateCreditLineHandle } from './handles/create-credit-line.ethereum.handle';
 import { CancelLoanEthereumHandle } from './handles/cancel-loan.ethereum.handle';
@@ -28,7 +29,8 @@ export class EthereumJob extends BaseJob {
     private linkProxyEthereumHandle: LinkProxyEthereumHandle,
     private withdrawEthereumHandle: WithdrawEthereumHandle,
     private InvestHandle: InvestEthereumHandle,
-    private createTrancheHandle: CreateTrancheEthereumHandle,
+    private createMultiTrancheEthereumHandle: CreateMultiTrancheEthereumHandle,
+    private createUniTrancheEthereumHandle: CreateUniTrancheEthereumHandle,
     private drawdownEthereumHandle: DrawdownEthereumHandle,
     private createCreditLineHandle: CreateCreditLineHandle,
     private cancelLoanEthereumHandle: CancelLoanEthereumHandle,
@@ -42,7 +44,8 @@ export class EthereumJob extends BaseJob {
       this.linkProxyEthereumHandle,
       this.withdrawEthereumHandle,
       this.InvestHandle,
-      this.createTrancheHandle,
+      this.createMultiTrancheEthereumHandle,
+      this.createUniTrancheEthereumHandle,
       this.drawdownEthereumHandle,
       this.createCreditLineHandle,
       this.cancelLoanEthereumHandle,
