@@ -14,6 +14,7 @@ import { CreateUniTrancheEthereumHandle } from './chains/ethereum/handles/create
 import { CreateCreditLineHandle } from './chains/ethereum/handles/create-credit-line.ethereum.handle';
 import { CancelLoanEthereumHandle } from './chains/ethereum/handles/cancel-loan.ethereum.handle';
 import { PaymentEthereumHandle } from './chains/ethereum/handles/payment.ethereum.handle';
+import { CloseLoanEthereumHandle } from './chains/ethereum/handles/close-loan.ethereum.handle';
 @Module({
   imports: [ShareModule, GatewayModule],
   providers: [
@@ -30,6 +31,7 @@ import { PaymentEthereumHandle } from './chains/ethereum/handles/payment.ethereu
     CreateCreditLineHandle,
     CancelLoanEthereumHandle,
     PaymentEthereumHandle,
+    CloseLoanEthereumHandle,
   ],
   exports: [],
 })
