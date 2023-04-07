@@ -1,3 +1,4 @@
+import { CloseLoanEthereumHandle } from './handles/close-loan.ethereum.handle';
 import { WithdrawEthereumHandle } from './handles/withdraw-loan.ethereum.handle';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -35,6 +36,7 @@ export class EthereumJob extends BaseJob {
     private createCreditLineHandle: CreateCreditLineHandle,
     private cancelLoanEthereumHandle: CancelLoanEthereumHandle,
     private paymentEthereumHandle: PaymentEthereumHandle,
+    private closeLoanEthereumHandle: CloseLoanEthereumHandle,
   ) {
     super(configService, crawlerInfoModel);
     this.chain = 'ethereum';
@@ -50,6 +52,7 @@ export class EthereumJob extends BaseJob {
       this.createCreditLineHandle,
       this.cancelLoanEthereumHandle,
       this.paymentEthereumHandle,
+      this.closeLoanEthereumHandle,
     ];
   }
 }

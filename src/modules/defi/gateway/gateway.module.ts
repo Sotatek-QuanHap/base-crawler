@@ -42,6 +42,9 @@ import { Payment, PaymentSchema } from './payment/payment.schema';
 import { PaymentService } from './payment/payment.service';
 import { PaymentListener } from './payment/payment.listener';
 import { loadHash } from './loadHash.service';
+import { CloseLoan, CloseLoanSchema } from './close-loan/close-loan.schema';
+import { CloseLoanService } from './close-loan/close-loan.service';
+import { CloseLoanListener } from './close-loan/close-loan.listener';
 
 @Module({
   imports: [
@@ -57,6 +60,7 @@ import { loadHash } from './loadHash.service';
       { name: CancelLoan.name, schema: CancelLoanSchema },
       { name: CreateCreditLine.name, schema: CreateCreditLineSchema },
       { name: Payment.name, schema: PaymentSchema },
+      { name: CloseLoan.name, schema: CloseLoanSchema },
     ]),
   ],
   providers: [
@@ -82,6 +86,8 @@ import { loadHash } from './loadHash.service';
     PaymentService,
     PaymentListener,
     loadHash,
+    CloseLoanService,
+    CloseLoanListener,
   ],
   exports: [
     TransferSingleService,
@@ -94,6 +100,7 @@ import { loadHash } from './loadHash.service';
     CancelLoanService,
     CreateCreditLineService,
     PaymentService,
+    CloseLoanService,
   ],
 })
 export class GatewayModule {
