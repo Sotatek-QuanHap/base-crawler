@@ -1,4 +1,4 @@
-import { Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 import { BaseSchema, dbOptionDefault } from 'src/common/database/base.schema';
 
@@ -6,6 +6,8 @@ export type CancelLoanDocument = HydratedDocument<CancelLoan>;
 
 @Schema(dbOptionDefault)
 export class CancelLoan extends BaseSchema {
+  @Prop({ lowercase: true })
+  from: string;
 }
 
 export const CancelLoanSchema = SchemaFactory.createForClass(CancelLoan);
