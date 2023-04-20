@@ -4,12 +4,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { BaseService } from 'src/rabbitmq/base.service';
 import { CancelLoan, CancelLoanDocument } from './cancel-loan.schema';
+import { loadHash } from '../loadHash.service';
 
 @Injectable()
 export class CancelLoanService extends BaseService<CancelLoanDocument> {
   constructor(
     configService: ConfigService,
     @InjectModel(CancelLoan.name) cancelLoanModel: Model<CancelLoanDocument>,
+    private loadHash: loadHash,
   ) {
     super(
       configService,
@@ -23,5 +25,10 @@ export class CancelLoanService extends BaseService<CancelLoanDocument> {
       ),
       cancelLoanModel,
     );
+  }
+  async processCreate(data: any): Promise<any> {
+    const rs = await this.loadHash.getTransaction(data.hash);
+    data.from = rs.from;
+    return await super.processCreate(data);
   }
 }
