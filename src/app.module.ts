@@ -20,7 +20,7 @@ export class AppModule {
   constructor(private configService: ConfigService) {
     console.log('ENV: ', process.env);
     for (const key of ['DB_HOST', 'RABBITMQ_URI', 'BASE_URL', 'NUMBER_MESSAGE_REQUEST_OF_ETHEREUM']) {
-      console.log(`ENV of ${key}: `, this.configService.get(key));
+      console.log(`ENV of [${key}]: `, this.configService.get(key));
     }
   }
 }
