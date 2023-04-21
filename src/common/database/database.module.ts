@@ -24,7 +24,7 @@ import { MongooseModule } from '@nestjs/mongoose';
           }
         }
         return {
-          uri: `mongodb://${username}:${password}@${host}:${port}/${database}?directConnection=true&authSource=admin&retryWrites=true&w=majority`,
+          uri: `mongodb://${username}:${password}@${host}:${port}/${database}?directConnection=true&authSource=admin&retryWrites=false&w=majority`,
           dbName: database,
 
         }
