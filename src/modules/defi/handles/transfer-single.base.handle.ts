@@ -11,16 +11,24 @@ export class TransferSingleBaseHandle extends BaseHandle {
   protected logNames: string[];
   protected service: BaseService<any>;
   protected mappings = [
-    { key: 'operator', convert: undefined },
-    { key: 'from', convert: undefined },
-    { key: 'to', convert: undefined },
-    { key: 'id', convert: undefined },
-    { key: 'value', convert: undefined },
+
   ];
   constructor(name: string, configService: ConfigService, service: any) {
     super(name, configService);
     this.service = service;
     this.logNames = ['TransferSingle'];
+    this.mappings = [
+      { key: 'operator', convert: undefined },
+      { key: 'from', convert: undefined },
+      { key: 'to', convert: undefined },
+      { key: 'id', convert: this.toNumber },
+      { key: 'value', convert: this.toNumber },
+    ]
+  }
+
+  toNumber(value: any) {
+    console.log('tonumbe')
+    return Number(value);
   }
 
   async handleLogParseSuccess(logDescription: LogDescription, log: Log, transaction: TransactionResponse, block: Block, chainId: number): Promise<boolean> {

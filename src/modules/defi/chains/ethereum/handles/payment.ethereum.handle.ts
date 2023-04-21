@@ -16,10 +16,10 @@ export class PaymentEthereumHandle extends TransferSingleBaseHandle {
     this.mappings = [
       { key: 'payer', convert: undefined },
       { key: 'pool', convert: undefined },
-      { key: 'interestAmount', convert: undefined },
-      { key: 'principalAmount', convert: undefined },
-      { key: 'remainingAmount', convert: undefined },
-      { key: 'reserveAmount', convert: undefined },
+      { key: 'interestAmount', convert: this.toNumber },
+      { key: 'principalAmount', convert: this.toNumber },
+      { key: 'remainingAmount', convert: this.toNumber },
+      { key: 'reserveAmount', convert: this.toNumber },
     ];
     this.logNames = ['PaymentApplied'];
   }

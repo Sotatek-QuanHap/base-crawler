@@ -14,8 +14,8 @@ export class TransferSingleEthereumHandle extends TransferSingleBaseHandle {
       { key: 'operator', convert: undefined },
       { key: 'from', convert: undefined },
       { key: 'to', convert: undefined },
-      { key: 'id', convert: undefined },
-      { key: 'value', convert: undefined },
+      { key: 'id', convert: this.toNumber },
+      { key: 'value', convert: this.toNumber },
     ];
     this.abi = TransferABI;
   }

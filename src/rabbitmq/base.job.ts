@@ -201,7 +201,7 @@ export class BaseJob extends RMQBaseHandle {
         { chainId: this.provider.network.chainId, block: numberBlock, chain: this.chain, timestamp: Date.now(), total: logs.length, sumaries: sumary },
         { upsert: true });
     } catch (error) {
-      console.log('error when save block');
+      console.log('error when save block', error);
     }
 
     // setTimeout(self.run, 3000, self);

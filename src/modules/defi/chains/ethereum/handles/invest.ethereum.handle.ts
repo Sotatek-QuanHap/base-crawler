@@ -15,8 +15,8 @@ export class InvestEthereumHandle extends TransferSingleBaseHandle {
     this.mappings = [
       { key: 'owner', convert: undefined },
       { key: 'tranche', convert: undefined },
-      { key: 'trancheId', convert: undefined },
-      { key: 'amount', convert: undefined },
+      { key: 'trancheId', convert: this.toNumber },
+      { key: 'amount', convert: this.toNumber },
     ];
     this.logNames = ['DepositMade'];
   }

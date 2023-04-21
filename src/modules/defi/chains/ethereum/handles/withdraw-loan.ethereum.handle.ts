@@ -12,9 +12,9 @@ export class WithdrawEthereumHandle extends TransferSingleBaseHandle {
     this.mappings = [
       { key: 'owner', convert: undefined },
       { key: 'tranche', convert: undefined },
-      { key: 'trancheId', convert: undefined },
-      { key: 'interestWithdrawn', convert: undefined },
-      { key: 'principalWithdrawn', convert: undefined },
+      { key: 'trancheId', convert: this.toNumber },
+      { key: 'interestWithdrawn', convert: this.toNumber },
+      { key: 'principalWithdrawn', convert: this.toNumber },
     ];
     this.logNames = ['WithdrawalMade'];
   }
