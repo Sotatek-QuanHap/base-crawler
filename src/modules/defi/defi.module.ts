@@ -35,6 +35,7 @@ import { CloseLoanEthereumHandle } from './chains/ethereum/handles/close-loan.et
   ],
   exports: [],
 })
+
 export class DefiModule {
   constructor(private ethereumJob: EthereumJob) {
     this.ethereumJob.listen();
