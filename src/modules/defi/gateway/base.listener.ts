@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import { ConsumeMessage } from "amqplib";
 import { BaseService } from "src/rabbitmq/base.service";
 import { RMQBaseHandle } from "src/rabbitmq/RMQBaseHandle";
 import { Store } from "src/rabbitmq/store";
@@ -35,6 +36,15 @@ export class BaseListener<T> extends RMQBaseHandle {
   async process(message: any): Promise<void> {
     await this.service.update(message);
 
+  }
+
+  async handleSuccess(message: ConsumeMessage, messageParse: any, sefl: RMQBaseHandle) {
+    console.log('handle success of base listen: ', sefl.getQueueName());
+    try {
+      sefl.channel.ack(message);
+    } catch (error) {
+      console.log('error at handle success', error, !sefl.channel);
+    }
   }
 
 }
