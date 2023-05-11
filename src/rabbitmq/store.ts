@@ -89,14 +89,23 @@ export class Store {
     );
     console.log('grpcUrl: ', grpcUrl);
     if (!grpcUrl) return;
-    const res = await axios({
-      method: 'get',
-      url: grpcUrl,
-      headers: {
-        'x-tream': '',
-        instance: this.instanceId,
-      },
-    });
+    let res = undefined;
+    while (true) {
+      try {
+        res = await axios({
+          method: 'get',
+          url: grpcUrl,
+          headers: {
+            'x-tream': '',
+            instance: this.instanceId,
+          },
+        });
+        break;
+      } catch (error) {
+        console.log('error at load grpc: ', error?.message);
+        await TimeUtils.sleepRandom({ min: 10000 });
+      }
+    }
     console.log('res.data: ', res.data);
     if (!res.data?.stringValue) {
       console.log('res.data?.stringValue: ', res.data);
