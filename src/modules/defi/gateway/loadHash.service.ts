@@ -18,7 +18,15 @@ export class loadHash {
   }
 
   async getTransaction(hash: string): Promise<any> {
-    return await this.provider.getTransaction(hash);
+    while (true) {
+      try {
+        return await this.provider.getTransaction(hash);
+      } catch (error) {
+        console.log('error at get transaction', hash, error);
+        await TimeUtils.sleep(Math.round(Math.random() * 3000 + 1000));
+        await this.loadProvider();
+      }
+    }
   }
 
   async loadProvider(): Promise<void> {
