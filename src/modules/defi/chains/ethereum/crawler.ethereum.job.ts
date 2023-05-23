@@ -1,3 +1,4 @@
+import { ToggleFundEthereumHandle } from './handles/toggle-fund.ethereum.handle';
 import { CloseLoanEthereumHandle } from './handles/close-loan.ethereum.handle';
 import { WithdrawEthereumHandle } from './handles/withdraw-loan.ethereum.handle';
 import { Injectable } from '@nestjs/common';
@@ -19,6 +20,7 @@ import { DrawdownEthereumHandle } from './handles/drawdown.ethereum.handle';
 import { CreateCreditLineHandle } from './handles/create-credit-line.ethereum.handle';
 import { CancelLoanEthereumHandle } from './handles/cancel-loan.ethereum.handle';
 import { PaymentEthereumHandle } from './handles/payment.ethereum.handle';
+import { CreateFundEthereumHandle } from './handles/create-fund.ethereum.handle';
 
 @Injectable()
 export class EthereumJob extends BaseJob {
@@ -37,6 +39,8 @@ export class EthereumJob extends BaseJob {
     private cancelLoanEthereumHandle: CancelLoanEthereumHandle,
     private paymentEthereumHandle: PaymentEthereumHandle,
     private closeLoanEthereumHandle: CloseLoanEthereumHandle,
+    private createFundEthereumHandle: CreateFundEthereumHandle,
+    private toggleFundEthereumHandle: ToggleFundEthereumHandle,
   ) {
     super(configService, crawlerInfoModel);
     this.chain = 'ethereum';
@@ -53,6 +57,8 @@ export class EthereumJob extends BaseJob {
       this.cancelLoanEthereumHandle,
       this.paymentEthereumHandle,
       this.closeLoanEthereumHandle,
+      this.createFundEthereumHandle,
+      this.toggleFundEthereumHandle,
     ];
   }
 }
