@@ -15,6 +15,8 @@ import { CreateCreditLineHandle } from './chains/ethereum/handles/create-credit-
 import { CancelLoanEthereumHandle } from './chains/ethereum/handles/cancel-loan.ethereum.handle';
 import { PaymentEthereumHandle } from './chains/ethereum/handles/payment.ethereum.handle';
 import { CloseLoanEthereumHandle } from './chains/ethereum/handles/close-loan.ethereum.handle';
+import { CreateFundEthereumHandle } from './chains/ethereum/handles/create-fund.ethereum.handle';
+import { ToggleFundEthereumHandle } from './chains/ethereum/handles/toggle-fund.ethereum.handle';
 @Module({
   imports: [ShareModule, GatewayModule],
   providers: [
@@ -32,10 +34,11 @@ import { CloseLoanEthereumHandle } from './chains/ethereum/handles/close-loan.et
     CancelLoanEthereumHandle,
     PaymentEthereumHandle,
     CloseLoanEthereumHandle,
+    CreateFundEthereumHandle,
+    ToggleFundEthereumHandle,
   ],
   exports: [],
 })
-
 export class DefiModule {
   constructor(private ethereumJob: EthereumJob) {
     this.ethereumJob.listen();

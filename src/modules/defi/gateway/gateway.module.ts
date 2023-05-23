@@ -45,6 +45,12 @@ import { loadHash } from './loadHash.service';
 import { CloseLoan, CloseLoanSchema } from './close-loan/close-loan.schema';
 import { CloseLoanService } from './close-loan/close-loan.service';
 import { CloseLoanListener } from './close-loan/close-loan.listener';
+import { CreateFundService } from './createfund/create-fund.service';
+import { CreateFundListener } from './createfund/create-fund.listener';
+import { CreateFund, CreateFundSchema } from './createfund/create-fund.schema';
+import { ToggleFund, ToggleFundSchema } from './togglefund/toggle-fund.schema';
+import { ToggleFundService } from './togglefund/toggle-fund.service';
+import { ToggleFundListener } from './togglefund/toggle-fund.listener';
 
 @Module({
   imports: [
@@ -61,6 +67,8 @@ import { CloseLoanListener } from './close-loan/close-loan.listener';
       { name: CreateCreditLine.name, schema: CreateCreditLineSchema },
       { name: Payment.name, schema: PaymentSchema },
       { name: CloseLoan.name, schema: CloseLoanSchema },
+      { name: CreateFund.name, schema: CreateFundSchema },
+      { name: ToggleFund.name, schema: ToggleFundSchema },
     ]),
   ],
   providers: [
@@ -88,6 +96,10 @@ import { CloseLoanListener } from './close-loan/close-loan.listener';
     loadHash,
     CloseLoanService,
     CloseLoanListener,
+    CreateFundService,
+    CreateFundListener,
+    ToggleFundService,
+    ToggleFundListener,
   ],
   exports: [
     TransferSingleService,
@@ -101,6 +113,8 @@ import { CloseLoanListener } from './close-loan/close-loan.listener';
     CreateCreditLineService,
     PaymentService,
     CloseLoanService,
+    CreateFundService,
+    ToggleFundService,
   ],
 })
 export class GatewayModule {
