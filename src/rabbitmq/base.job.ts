@@ -1,15 +1,19 @@
-import { ConfigService } from "@nestjs/config";
-import { ConsumeMessage } from "amqplib";
-import { ethers } from "ethers";
+import { ConfigService } from '@nestjs/config';
+import { ConsumeMessage } from 'amqplib';
+import { ethers } from 'ethers';
 // import { ConfigCrawlerService } from "src/common/configCrawlerService/configCrawler.service";
-import { RMQBaseHandle } from "src/rabbitmq/RMQBaseHandle";
-import { Store } from "src/rabbitmq/store";
-import { TimeUtils } from "src/utils/time.utils";
-import { BaseHandle } from "./base.handle";
+import { RMQBaseHandle } from 'src/rabbitmq/RMQBaseHandle';
+import { Store } from 'src/rabbitmq/store';
+import { TimeUtils } from 'src/utils/time.utils';
+import { BaseHandle } from './base.handle';
 import { Block } from '@ethersproject/abstract-provider';
-import { InjectModel } from "@nestjs/mongoose";
-import { CrawlerInfo, CrawlerInfoDocument } from "src/common/database/crawler.schema";
-import { Model } from "mongoose";
+import { InjectModel } from '@nestjs/mongoose';
+import {
+  CrawlerInfo,
+  CrawlerInfoDocument,
+} from 'src/common/database/crawler.schema';
+import { Model } from 'mongoose';
+import { GoogleChatUtils } from 'src/utils/googlechat.utils';
 
 export class BaseJob extends RMQBaseHandle {
   protected provider: ethers.providers.JsonRpcProvider;
@@ -22,11 +26,14 @@ export class BaseJob extends RMQBaseHandle {
   protected crawlerInfoModel: Model<CrawlerInfoDocument>;
   // protected configCrawlerService: ConfigCrawlerService;
   protected handles: Array<BaseHandle> = [];
-  constructor(configService: ConfigService, @InjectModel(CrawlerInfo.name) crawlerInfoModel: Model<CrawlerInfoDocument>) {
+  constructor(
+    configService: ConfigService,
+    @InjectModel(CrawlerInfo.name) crawlerInfoModel: Model<CrawlerInfoDocument>,
+  ) {
     super(configService);
     this.crawlerInfoModel = crawlerInfoModel;
     // this.configCrawlerService = configCrawlerService;
-  };
+  }
 
   async init() {
     console.log('init at ', this.chain);
@@ -51,25 +58,41 @@ export class BaseJob extends RMQBaseHandle {
   }
 
   getNumberMessageLimit(): number {
-    this.numberMessageLimit = +this.configService.get(`NUMBER_MESSAGE_REQUEST_OF_${this.chain}`.toUpperCase(), '0');
-    console.log('getNumberMessageLimit of ' + this.chain, this.numberMessageLimit);
+    this.numberMessageLimit = +this.configService.get(
+      `NUMBER_MESSAGE_REQUEST_OF_${this.chain}`.toUpperCase(),
+      '0',
+    );
+    console.log(
+      'getNumberMessageLimit of ' + this.chain,
+      this.numberMessageLimit,
+    );
     return this.numberMessageLimit;
   }
 
   getQueueName(): string {
-    this.queueName = this.configService.get(`QUEUE_REQUEST_BLOCK_OF_${this.chain}`.toUpperCase(), `request-block-${this.chain}`);
+    this.queueName = this.configService.get(
+      `QUEUE_REQUEST_BLOCK_OF_${this.chain}`.toUpperCase(),
+      `request-block-${this.chain}`,
+    );
     return this.queueName;
   }
 
   async loadChannel() {
-    this.channel = await Store.getChannel(this.getQueueName(), this.configService);
+    this.channel = await Store.getChannel(
+      this.getQueueName(),
+      this.configService,
+    );
   }
 
   async customerListen() {
     await this.channel.prefetch(this.getNumberMessageLimit(), false);
-    await this.channel.consume(this.getQueueName(), (msg) => {
-      this.handle(msg, this);
-    }, { noAck: false });
+    await this.channel.consume(
+      this.getQueueName(),
+      (msg) => {
+        this.handle(msg, this);
+      },
+      { noAck: false },
+    );
   }
 
   async process(message: any): Promise<void> {
@@ -88,14 +111,21 @@ export class BaseJob extends RMQBaseHandle {
 
       if (this.grpcIndex >= grpcs.length || this.countRetry > 10) {
         console.log('grps: ', grpcs, this.grpcIndex, this.countRetry);
-        Store.sendToQueue(this.configService.get(`QUEUE_ERROR_MESSAGE`.toUpperCase(), `error-message`),
-          Buffer.from(JSON.stringify({
-            source: 'load-grpc',
-            chain: this.chain,
-            id: this.getId(),
-            message: 'grpcs is empty',
-          })),
-          this.configService);
+        Store.sendToQueue(
+          this.configService.get(
+            `QUEUE_ERROR_MESSAGE`.toUpperCase(),
+            `error-message`,
+          ),
+          Buffer.from(
+            JSON.stringify({
+              source: 'load-grpc',
+              chain: this.chain,
+              id: this.getId(),
+              message: 'grpcs is empty',
+            }),
+          ),
+          this.configService,
+        );
         await Store.loadGrpcs(this.chain);
         this.countRetry = 0;
         // try {
@@ -108,18 +138,23 @@ export class BaseJob extends RMQBaseHandle {
 
         // }
         // throw { message: 'Cannot load provider' };
-
       }
-      console.log(`load grpc of ${this.chain}`, grpcs, grpcs[this.grpcIndex])
+      console.log(`load grpc of ${this.chain}`, grpcs, grpcs[this.grpcIndex]);
 
       try {
         if (this.network)
-          this.provider = new ethers.providers.JsonRpcProvider(grpcs[this.grpcIndex], this.network);
+          this.provider = new ethers.providers.JsonRpcProvider(
+            grpcs[this.grpcIndex],
+            this.network,
+          );
         else {
-          this.provider = new ethers.providers.JsonRpcProvider(grpcs[this.grpcIndex]);
+          this.provider = new ethers.providers.JsonRpcProvider(
+            grpcs[this.grpcIndex],
+          );
           this.network = await this.provider.getNetwork();
         }
       } catch (error) {
+        GoogleChatUtils.sendNormalText(`error load provider: ${error}`);
         this.network = undefined;
         await TimeUtils.sleep(Math.round(Math.random() * 3000 + 1000));
         continue;
@@ -133,6 +168,9 @@ export class BaseJob extends RMQBaseHandle {
       try {
         return await this.provider[name](data);
       } catch (error) {
+        GoogleChatUtils.sendNormalText(
+          `error at request blockchain:${name} ${data} ${error}`,
+        );
         console.log('error at request blockchain', name, data, error);
         await TimeUtils.sleep(Math.round(Math.random() * 3000 + 1000));
         await this.loadProvider();
@@ -141,7 +179,10 @@ export class BaseJob extends RMQBaseHandle {
   }
 
   async getLogs(blockHash: string): Promise<Array<ethers.providers.Log>> {
-    return await this.requestBlockChain<Array<ethers.providers.Log>>('getLogs', { blockHash });
+    return await this.requestBlockChain<Array<ethers.providers.Log>>(
+      'getLogs',
+      { blockHash },
+    );
   }
 
   exportLogs(transaction: ethers.providers.TransactionResponse) {
@@ -152,23 +193,20 @@ export class BaseJob extends RMQBaseHandle {
       } catch (error) {
         resolve({ transaction, logs: [] });
       }
-    })
+    });
   }
-
-
 
   async run(self: BaseJob, numberBlock: number): Promise<void> {
     if (!self.provider) {
       await self.loadProvider();
     }
-    console.log('number block: ', numberBlock)
-    if (!numberBlock)
-      return;
+    console.log('number block: ', numberBlock);
+    if (!numberBlock) return;
     // this.provider.getBlock(numberBlock);
     const block = await this.requestBlockChain<Block>('getBlock', numberBlock);
 
     if (block == null) {
-      console.log('block is null')
+      console.log('block is null');
       return;
     }
     // for (const transaction of block.transactions) {
@@ -182,11 +220,17 @@ export class BaseJob extends RMQBaseHandle {
     const start = Date.now();
 
     const logs = await this.getLogs(block.hash);
-    console.log(`Load logs: `, (Date.now() - start));
+    console.log(`Load logs: `, Date.now() - start);
     const sumary = {} as any;
     for (const log of logs) {
       for (const handle of self.handles) {
-        const isBreak = await handle.processLog(log, undefined, block, sumary, this.network?.chainId);
+        const isBreak = await handle.processLog(
+          log,
+          undefined,
+          block,
+          sumary,
+          this.network?.chainId,
+        );
         if (isBreak) {
           break;
         }
@@ -198,8 +242,16 @@ export class BaseJob extends RMQBaseHandle {
       console.log('sumary: ', sumary);
       await this.crawlerInfoModel.findOneAndUpdate(
         { chainId: this.provider.network.chainId, block: numberBlock },
-        { chainId: this.provider.network.chainId, block: numberBlock, chain: this.chain, timestamp: Date.now(), total: logs.length, sumaries: sumary },
-        { upsert: true });
+        {
+          chainId: this.provider.network.chainId,
+          block: numberBlock,
+          chain: this.chain,
+          timestamp: Date.now(),
+          total: logs.length,
+          sumaries: sumary,
+        },
+        { upsert: true },
+      );
     } catch (error) {
       console.log('error when save block', error);
     }
@@ -207,7 +259,11 @@ export class BaseJob extends RMQBaseHandle {
     // setTimeout(self.run, 3000, self);
   }
 
-  async handleSuccess(message: ConsumeMessage, messageParse: any, sefl: RMQBaseHandle) {
+  async handleSuccess(
+    message: ConsumeMessage,
+    messageParse: any,
+    sefl: RMQBaseHandle,
+  ) {
     console.log('handle success of base job: ', sefl.getQueueName());
     try {
       sefl.channel.ack(message);
@@ -215,5 +271,4 @@ export class BaseJob extends RMQBaseHandle {
       console.log('error at handle success', error, !sefl.channel);
     }
   }
-
 }
