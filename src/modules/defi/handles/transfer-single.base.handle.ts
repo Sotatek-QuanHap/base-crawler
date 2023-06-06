@@ -8,7 +8,6 @@ import { BaseService } from "src/rabbitmq/base.service";
 
 @Injectable()
 export class TransferSingleBaseHandle extends BaseHandle {
-  protected logNames: string[];
   protected service: BaseService<any>;
   protected mappings = [
 
@@ -27,7 +26,6 @@ export class TransferSingleBaseHandle extends BaseHandle {
   }
 
   toNumber(value: any) {
-    console.log('tonumbe')
     return Number(value);
   }
 
@@ -46,8 +44,8 @@ export class TransferSingleBaseHandle extends BaseHandle {
         hash: log.transactionHash,
         logIndex: log.logIndex,
         chainId,
-        block: block.number,
-        timestamp: block.timestamp,
+        block: log.blockNumber,
+        timestamp: block?.timestamp,
         ...data,
       })
       return true;

@@ -41,6 +41,10 @@ export class RMQBaseHandle {
   }
 
   async listen(): Promise<void> {
+    if (this.getNumberMessageLimit() < 1) {
+      console.log('no listen at ', this.getQueueName());
+      return;
+    }
     await this.loadChannel();
     this.channel.on('error', () => {
       Store.removeQueue(this.getQueueName());
@@ -106,13 +110,18 @@ export class RMQBaseHandle {
 
   async handleError(message: ConsumeMessage, sefl: RMQBaseHandle, error: any) {
     console.log('has error, ', error);
+    console.log('========handle error==========', message.content.toString(), sefl.getQueueName());
+    // sefl.channel.reject(message, true);
+
     if (!sefl.channel)
       return;
     try {
-      await sefl.channel.cancel(message.fields.consumerTag);
+      sefl.channel.ack(message);
     } catch (error) {
-
+      console.log('error at ack: ', error);
     }
+    const msg = JSON.parse(message.content.toString());
+    Store.sendToQueue(sefl.getQueueName(), Buffer.from(JSON.stringify({ ...msg, retry: (msg.retry || 0) + 1 })), sefl.configService, 2);
   }
 
   async handleSuccess(message: ConsumeMessage, messageParse: any, sefl: RMQBaseHandle) {

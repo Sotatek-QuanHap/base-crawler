@@ -1,6 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { ConsumeMessage } from 'amqplib';
-import { ethers } from 'ethers';
+import { BigNumber, ethers, utils } from 'ethers';
 // import { ConfigCrawlerService } from "src/common/configCrawlerService/configCrawler.service";
 import { RMQBaseHandle } from 'src/rabbitmq/RMQBaseHandle';
 import { Store } from 'src/rabbitmq/store';
@@ -14,10 +14,13 @@ import {
 } from 'src/common/database/crawler.schema';
 import { Model } from 'mongoose';
 import { GoogleChatUtils } from 'src/utils/googlechat.utils';
+import axios from 'axios';
+import { from } from 'rxjs';
 
 export class BaseJob extends RMQBaseHandle {
   protected provider: ethers.providers.JsonRpcProvider;
   protected network: ethers.providers.Network;
+  protected grpc: string;
   public chain: string;
   // protected grpcs: Array<string> = [];
   protected grpcIndex: number = 0;
@@ -26,6 +29,7 @@ export class BaseJob extends RMQBaseHandle {
   protected crawlerInfoModel: Model<CrawlerInfoDocument>;
   // protected configCrawlerService: ConfigCrawlerService;
   protected handles: Array<BaseHandle> = [];
+  protected eventNames = {};
   constructor(
     configService: ConfigService,
     @InjectModel(CrawlerInfo.name) crawlerInfoModel: Model<CrawlerInfoDocument>,
@@ -77,6 +81,18 @@ export class BaseJob extends RMQBaseHandle {
     return this.queueName;
   }
 
+  setQueueName(queueName: string) {
+    this.queueName = queueName;
+  }
+
+  setHandlers(handlers: BaseHandle[]) {
+    this.handles = handlers;
+  }
+
+  getHandlers() {
+    return this.handles;
+  }
+
   async loadChannel() {
     this.channel = await Store.getChannel(
       this.getQueueName(),
@@ -85,6 +101,7 @@ export class BaseJob extends RMQBaseHandle {
   }
 
   async customerListen() {
+    console.log('custom listen at ', this.getQueueName())
     await this.channel.prefetch(this.getNumberMessageLimit(), false);
     await this.channel.consume(
       this.getQueueName(),
@@ -97,7 +114,33 @@ export class BaseJob extends RMQBaseHandle {
 
   async process(message: any): Promise<void> {
     console.log('msg: ', message);
-    await this.run(this, message.blockNumber);
+    const { type, retry, fromBlock, toBlock, blockNumber, ...other } = message;
+    if ((retry || 0) > this.configService.get<number>('NUMBER_RETRY_MAX', 5)) {
+      Store.sendToQueue(
+        this.configService.get(
+          `QUEUE_ERROR_MESSAGE`.toUpperCase(),
+          `error-message`,
+        ),
+        Buffer.from(
+          JSON.stringify({
+            source: 'retry-max',
+            chain: this.chain,
+            id: this.getId(),
+            message: `number retry is greater than ${this.configService.get<number>('NUMBER_RETRY_MAX', 5)}`,
+            data: message,
+          }),
+        ),
+        this.configService,
+      );
+      return;
+    }
+    switch (message.type) {
+      case 'range':
+        await this.loadByRange(this, { fromBlock: BigNumber.from(fromBlock).toHexString(), toBlock: BigNumber.from(toBlock).toHexString(), other }, retry);
+        break;
+      default:
+        await this.run(this, blockNumber, retry);
+    }
   }
 
   async loadProvider(): Promise<void> {
@@ -153,6 +196,7 @@ export class BaseJob extends RMQBaseHandle {
           );
           this.network = await this.provider.getNetwork();
         }
+        this.grpc = grpcs[this.grpcIndex];
       } catch (error) {
         GoogleChatUtils.sendNormalText(`error load provider: ${error}`);
         this.network = undefined;
@@ -169,7 +213,7 @@ export class BaseJob extends RMQBaseHandle {
         return await this.provider[name](data);
       } catch (error) {
         GoogleChatUtils.sendNormalText(
-          `error at request blockchain:${name} ${data} ${error}`,
+          `error at request blockchain:${name} ${JSON.stringify(data)} ${error}`,
         );
         console.log('error at request blockchain', name, data, error);
         await TimeUtils.sleep(Math.round(Math.random() * 3000 + 1000));
@@ -178,11 +222,68 @@ export class BaseJob extends RMQBaseHandle {
     }
   }
 
-  async getLogs(blockHash: string): Promise<Array<ethers.providers.Log>> {
-    return await this.requestBlockChain<Array<ethers.providers.Log>>(
-      'getLogs',
-      { blockHash },
-    );
+  async requestBlockChainByAxios(data: any): Promise<any> {
+    while (true) {
+      try {
+        const res = await axios({
+          method: 'post',
+          url: this.grpc,
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          data,
+        })
+        return res.data?.result;
+      } catch (error) {
+        GoogleChatUtils.sendNormalText(
+          `error at request blockchain by axios using ${this.grpc}: ${JSON.stringify(data)} ${error.toString()}`,
+        );
+        console.log('error at request blockchain', data, error.toString());
+        await TimeUtils.sleep(Math.round(Math.random() * 3000 + 1000));
+        await this.loadProvider();
+      }
+    }
+  }
+
+  async getLogs(data: any, retry: number = 0): Promise<Array<ethers.providers.Log>> {
+
+    const topicRequest = [];
+    if (retry && retry > this.configService.get<number>('RETRY_LEVEL_I', 3)) {
+      const topics = {};
+      for (const handler of this.getHandlers()) {
+        for (const e of handler.toTopics()) {
+          topics[e.name] = e.topic;
+        }
+      }
+      if (Object.values(topics).length)
+        topicRequest.push(Object.values(topics));
+    }
+    //   return await this.requestBlockChain<Array<ethers.providers.Log>>(
+    //     'getLogs',
+    //     data,
+    //   );
+
+
+    // if (this.configService.get<number>('RETRY_LEVEL_I', 3) < retry && retry < this.configService.get<number>('RETRY_LEVEL_I', 5))
+    //   return await this.requestBlockChain<Array<ethers.providers.Log>>(
+    //     'getLogs',
+    //     { ...data, topics: [Object.values(topics)] },
+    //   );
+
+    const raw = JSON.stringify({
+      "method": "eth_getLogs",
+      "params": [
+        {
+          ...data,
+          "topics": topicRequest,
+        }
+      ],
+      "id": Math.round(Math.random() * 50) + Math.round(Math.random() * 50),
+      "jsonrpc": "2.0"
+    });
+
+    console.log('raw: ', raw);
+    return await this.requestBlockChainByAxios(raw);
   }
 
   exportLogs(transaction: ethers.providers.TransactionResponse) {
@@ -196,7 +297,30 @@ export class BaseJob extends RMQBaseHandle {
     });
   }
 
-  async run(self: BaseJob, numberBlock: number): Promise<void> {
+  async loadByRange(self: BaseJob, data: any, retry?: number): Promise<void> {
+    if (!self.provider) {
+      await self.loadProvider();
+    }
+
+    const logs = await self.getLogs(data, retry);
+    for (const log of logs) {
+      // console.log(log);
+      for (const handle of self.handles) {
+        const isBreak = await handle.processLog(
+          log,
+          undefined,
+          undefined,
+          undefined,
+          this.network?.chainId,
+        );
+        if (isBreak) {
+          break;
+        }
+      }
+    }
+  }
+
+  async run(self: BaseJob, numberBlock: number, retry?: number): Promise<void> {
     if (!self.provider) {
       await self.loadProvider();
     }
@@ -219,7 +343,7 @@ export class BaseJob extends RMQBaseHandle {
     // }
     const start = Date.now();
 
-    const logs = await this.getLogs(block.hash);
+    const logs = await self.getLogs({ blockHash: block.hash }, retry);
     console.log(`Load logs: `, Date.now() - start);
     const sumary = {} as any;
     for (const log of logs) {
@@ -272,3 +396,8 @@ export class BaseJob extends RMQBaseHandle {
     }
   }
 }
+
+
+//0x85b26c
+//0x85b26c
+//

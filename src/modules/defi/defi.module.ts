@@ -17,11 +17,13 @@ import { PaymentEthereumHandle } from './chains/ethereum/handles/payment.ethereu
 import { CloseLoanEthereumHandle } from './chains/ethereum/handles/close-loan.ethereum.handle';
 import { CreateFundEthereumHandle } from './chains/ethereum/handles/create-fund.ethereum.handle';
 import { ToggleFundEthereumHandle } from './chains/ethereum/handles/toggle-fund.ethereum.handle';
+import { EthereumJobByRange } from './chains/ethereum/crawler.ethereum.job_by_range';
 @Module({
   imports: [ShareModule, GatewayModule],
   providers: [
     ConfigService,
     EthereumJob,
+    EthereumJobByRange,
     TransferSingleEthereumHandle,
     CreateLoanEthereumHandle,
     LinkProxyEthereumHandle,
@@ -40,7 +42,10 @@ import { ToggleFundEthereumHandle } from './chains/ethereum/handles/toggle-fund.
   exports: [],
 })
 export class DefiModule {
-  constructor(private ethereumJob: EthereumJob) {
+  constructor(private ethereumJob: EthereumJob, private ethereumJobByRange: EthereumJobByRange) {
     this.ethereumJob.listen();
+    this.ethereumJobByRange.setHandlers(this.ethereumJob.getHandlers());
+    console.log(this.ethereumJob.getQueueName(), this.ethereumJobByRange.getQueueName());
+    this.ethereumJobByRange.listen();
   }
 }

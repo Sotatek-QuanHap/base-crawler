@@ -1,19 +1,45 @@
 import { Block, TransactionResponse, Log } from "@ethersproject/abstract-provider";
 import { Interface, LogDescription, TransactionDescription } from "ethers/lib/utils";
-import { ethers } from "ethers";
+import { ethers, utils } from "ethers";
 import { ConfigService } from "@nestjs/config";
 import { TimeUtils } from "src/utils/time.utils";
 
 export class BaseHandle {
-  protected abi: any;
+  public abi: any;
   public chain: string;
-  protected inter: Interface;
+  public inter: Interface;
   protected configService: ConfigService;
   protected inited: boolean = false;
   protected name: string;
+  protected logNames: string[];
   constructor(name: string, configService: ConfigService) {
     this.configService = configService;
     this.name = name;
+  }
+
+  public toTopics(): any[] {
+    if (!this.abi)
+      return [];
+    const rs = [];
+    for (const element of this.abi) {
+      if (element.type != 'event')
+        continue;
+      if (!this.logNames.includes(element.name)) {
+        continue;
+      }
+      const params: string[] = [];
+      for (const param of (element.inputs || [])) {
+        params.push(param.type);
+      }
+
+      const eventInterface = `${element.name}(${params.join(',')})`;
+      rs.push({ name: element.name, eventInterface, topic: utils.id(eventInterface) })
+    }
+    return rs;
+  }
+
+  public getLogNames(): string[] {
+    return this.logNames;
   }
 
   public getName(): string {
