@@ -14,6 +14,17 @@ export class Store {
   public static apiEtherScans = new Map<string, Array<string>>();
   public static coinMaps = new Map<string, Map<string, any>>();
   private static isRequestConnected = false;
+  private static logs: any[] = [];
+
+  static pushSumary(blockInfo: any, sumary: any) {
+    this.logs.push({ blockInfo, sumary });
+  }
+
+  static pop(): any {
+    if (!this.logs.length)
+      return null;
+    return this.logs.shift();
+  }
   public static instanceId = `crawler-instance-${Math.round(
     Math.random() * Date.now(),
   )}`;

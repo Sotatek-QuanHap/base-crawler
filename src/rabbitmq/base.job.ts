@@ -39,6 +39,12 @@ export class BaseJob extends RMQBaseHandle {
     // this.configCrawlerService = configCrawlerService;
   }
 
+  toHexNumber(number: number) {
+    console.log('number: ', number);
+    const str = BigNumber.from(number).toHexString();
+    return str.trim().replace(/^0x([0]+)(.*)/, '0x$2');
+  }
+
   async init() {
     console.log('init at ', this.chain);
     while (true) {
@@ -136,10 +142,12 @@ export class BaseJob extends RMQBaseHandle {
     }
     switch (message.type) {
       case 'range':
-        await this.loadByRange(this, { fromBlock: BigNumber.from(fromBlock).toHexString(), toBlock: BigNumber.from(toBlock).toHexString(), other }, retry);
+        await this.loadByRange(this, { fromBlock: this.toHexNumber(fromBlock), toBlock: this.toHexNumber(toBlock), other }, retry);
         break;
       default:
-        await this.run(this, blockNumber, retry);
+        await this.loadByRange(this, { fromBlock: this.toHexNumber(blockNumber), toBlock: this.toHexNumber(blockNumber) }, retry);
+      // break;
+      // await this.run(this, blockNumber, retry);
     }
   }
 
@@ -223,6 +231,7 @@ export class BaseJob extends RMQBaseHandle {
   }
 
   async requestBlockChainByAxios(data: any): Promise<any> {
+    let retry = 0;
     while (true) {
       try {
         const res = await axios({
@@ -233,14 +242,42 @@ export class BaseJob extends RMQBaseHandle {
           },
           data,
         })
-        return res.data?.result;
+        if (res.data.error) {
+          Store.sendToQueue(
+            this.configService.get(
+              `QUEUE_ERROR_MESSAGE`.toUpperCase(),
+              `error-message`,
+            ),
+            Buffer.from(
+              JSON.stringify({
+                source: 'load-grpc',
+                chain: this.chain,
+                id: this.getId(),
+                message: res.data?.error,
+                data,
+              }),
+            ),
+            this.configService,
+          );
+          GoogleChatUtils.sendNormalText(
+            `error at request blockchain by axios using ${this.grpc}: ${JSON.stringify(data)} ${res.data?.error?.toString()}`,
+          );
+        }
+        console.log(res.data)
+        return res.data?.result || [];
       } catch (error) {
         GoogleChatUtils.sendNormalText(
           `error at request blockchain by axios using ${this.grpc}: ${JSON.stringify(data)} ${error.toString()}`,
         );
         console.log('error at request blockchain', data, error.toString());
         await TimeUtils.sleep(Math.round(Math.random() * 3000 + 1000));
-        await this.loadProvider();
+        if (error.response.status != 503 || retry > this.configService.get<number>('MAX_RETRY_503', 5)) {
+          retry = 0;
+          await this.loadProvider();
+        } else {
+          retry++;
+        }
+
       }
     }
   }
@@ -305,18 +342,20 @@ export class BaseJob extends RMQBaseHandle {
     const logs = await self.getLogs(data, retry);
     for (const log of logs) {
       // console.log(log);
+      const sumary = {};
       for (const handle of self.handles) {
         const isBreak = await handle.processLog(
           log,
           undefined,
           undefined,
-          undefined,
+          sumary,
           this.network?.chainId,
         );
         if (isBreak) {
           break;
         }
       }
+      Store.pushSumary({ chainId: this.provider.network.chainId, block: log.blockNumber, chain: this.chain, timestamp: Date.now() }, sumary);
     }
   }
 
@@ -396,8 +435,3 @@ export class BaseJob extends RMQBaseHandle {
     }
   }
 }
-
-
-//0x85b26c
-//0x85b26c
-//
