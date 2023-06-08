@@ -1,3 +1,4 @@
+import { InvestedFundEthereumHandle } from './handles/invest-fund.ethereum.handle';
 import { ToggleFundEthereumHandle } from './handles/toggle-fund.ethereum.handle';
 import { CloseLoanEthereumHandle } from './handles/close-loan.ethereum.handle';
 import { WithdrawEthereumHandle } from './handles/withdraw-loan.ethereum.handle';
@@ -41,6 +42,7 @@ export class EthereumJob extends BaseJob {
     private closeLoanEthereumHandle: CloseLoanEthereumHandle,
     private createFundEthereumHandle: CreateFundEthereumHandle,
     private toggleFundEthereumHandle: ToggleFundEthereumHandle,
+    private investedFundEthereumHandle: InvestedFundEthereumHandle,
   ) {
     super(configService, crawlerInfoModel);
     this.chain = 'ethereum';
@@ -59,6 +61,7 @@ export class EthereumJob extends BaseJob {
       this.closeLoanEthereumHandle,
       this.createFundEthereumHandle,
       this.toggleFundEthereumHandle,
+      this.investedFundEthereumHandle,
     ];
   }
 }
