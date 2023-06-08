@@ -51,6 +51,8 @@ import { CreateFund, CreateFundSchema } from './createfund/create-fund.schema';
 import { ToggleFund, ToggleFundSchema } from './togglefund/toggle-fund.schema';
 import { ToggleFundService } from './togglefund/toggle-fund.service';
 import { ToggleFundListener } from './togglefund/toggle-fund.listener';
+import { InvestFund, InvestFundSchema } from './invest-fund/invest-fund.schema';
+import { InvestFundService } from './invest-fund/invest-fund.service';
 
 @Module({
   imports: [
@@ -69,6 +71,7 @@ import { ToggleFundListener } from './togglefund/toggle-fund.listener';
       { name: CloseLoan.name, schema: CloseLoanSchema },
       { name: CreateFund.name, schema: CreateFundSchema },
       { name: ToggleFund.name, schema: ToggleFundSchema },
+      { name: InvestFund.name, schema: InvestFundSchema },
     ]),
   ],
   providers: [
@@ -100,6 +103,8 @@ import { ToggleFundListener } from './togglefund/toggle-fund.listener';
     CreateFundListener,
     ToggleFundService,
     ToggleFundListener,
+    InvestFundService,
+    InvestListener,
   ],
   exports: [
     TransferSingleService,
@@ -115,6 +120,7 @@ import { ToggleFundListener } from './togglefund/toggle-fund.listener';
     CloseLoanService,
     CreateFundService,
     ToggleFundService,
+    InvestFundService,
   ],
 })
 export class GatewayModule {
