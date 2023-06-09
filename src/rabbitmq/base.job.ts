@@ -260,14 +260,14 @@ export class BaseJob extends RMQBaseHandle {
             this.configService,
           );
           GoogleChatUtils.sendNormalText(
-            `error at request blockchain by axios using ${this.grpc}: ${JSON.stringify(data)} ${res.data?.error?.toString()}`,
+            `[ERROR FROM RESPONSE] ${this.grpc}: ${JSON.stringify(data)} ${res.data?.error?.toString()}`,
           );
         }
-        console.log(res.data)
-        return res.data?.result || [];
+        console.log('', res.data)
+        return res.data?.result;
       } catch (error) {
         GoogleChatUtils.sendNormalText(
-          `error at request blockchain by axios using ${this.grpc}: ${JSON.stringify(data)} ${error.toString()}`,
+          `[ERROR FROM CATCH] ${this.grpc}: ${JSON.stringify(data)} ${error.toString()}`,
         );
         console.log('error at request blockchain', data, error.toString());
         await TimeUtils.sleep(Math.round(Math.random() * 3000 + 1000));
@@ -285,16 +285,18 @@ export class BaseJob extends RMQBaseHandle {
   async getLogs(data: any, retry: number = 0): Promise<Array<ethers.providers.Log>> {
 
     const topicRequest = [];
-    if (retry && retry > this.configService.get<number>('RETRY_LEVEL_I', 3)) {
-      const topics = {};
-      for (const handler of this.getHandlers()) {
-        for (const e of handler.toTopics()) {
-          topics[e.name] = e.topic;
-        }
+    // if (retry && retry > this.configService.get<number>('RETRY_LEVEL_I', 3)) {
+
+    // }
+
+    const topics = {};
+    for (const handler of this.getHandlers()) {
+      for (const e of handler.toTopics()) {
+        topics[e.topic] = e;
       }
-      if (Object.values(topics).length)
-        topicRequest.push(Object.values(topics));
     }
+    if (Object.keys(topics).length)
+      topicRequest.push(Object.keys(topics));
     //   return await this.requestBlockChain<Array<ethers.providers.Log>>(
     //     'getLogs',
     //     data,
@@ -323,6 +325,19 @@ export class BaseJob extends RMQBaseHandle {
     return await this.requestBlockChainByAxios(raw);
   }
 
+  async getBlock(hash: string, retry: number = 0): Promise<Array<ethers.providers.Log>> {
+    const raw = JSON.stringify(
+      {
+        "method": "eth_getBlockByHash",
+        "params": [hash, false],
+        "id": Math.round(Math.random() * 50) + Math.round(Math.random() * 50),
+        "jsonrpc": "2.0"
+      });
+
+    console.log('raw of getBlock: ', raw);
+    return await this.requestBlockChainByAxios(raw);
+  }
+
   exportLogs(transaction: ethers.providers.TransactionResponse) {
     return new Promise(async (resolve, reject) => {
       try {
@@ -339,15 +354,21 @@ export class BaseJob extends RMQBaseHandle {
       await self.loadProvider();
     }
 
+    let currentBlock = undefined;
+    let block = undefined;
     const logs = await self.getLogs(data, retry);
-    for (const log of logs) {
+    for (const log of (logs || [])) {
+      if (currentBlock != log.blockHash) {
+        currentBlock = log.blockHash;
+        block = await this.getBlock(log.blockHash);
+      }
       // console.log(log);
       const sumary = {};
       for (const handle of self.handles) {
         const isBreak = await handle.processLog(
           log,
           undefined,
-          undefined,
+          block,
           sumary,
           this.network?.chainId,
         );

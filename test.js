@@ -20,7 +20,7 @@ async function run() {
   // const sumaries = {};
   // toNormalize(sumary, ['sumaries'], sumaries);
   // console.log(sumaries);
-  console.log(ethers.BigNumber.from('24366104').toHexString())
+  console.log(ethers.BigNumber.from('0x0173cc18').toNumber())
 }
 
 run();

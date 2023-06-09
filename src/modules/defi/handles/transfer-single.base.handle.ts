@@ -5,6 +5,7 @@ import { Log, TransactionResponse, Block } from "@ethersproject/abstract-provide
 import { LogDescription } from "ethers/lib/utils";
 import { TransferSingleService } from "../gateway/mintnft/transfer-single.service";
 import { BaseService } from "src/rabbitmq/base.service";
+import { BigNumber } from "ethers";
 
 @Injectable()
 export class TransferSingleBaseHandle extends BaseHandle {
@@ -44,8 +45,8 @@ export class TransferSingleBaseHandle extends BaseHandle {
         hash: log.transactionHash,
         logIndex: log.logIndex,
         chainId,
-        block: log.blockNumber,
-        timestamp: block?.timestamp,
+        block: BigNumber.from(log.blockNumber).toNumber(),
+        timestamp: block?.timestamp ? BigNumber.from(block?.timestamp).toNumber() : 0,
         ...data,
       })
       return true;
