@@ -328,7 +328,7 @@ export class BaseJob extends RMQBaseHandle {
   async getBlock(number: string, retry: number = 0): Promise<Array<ethers.providers.Log>> {
     const raw = JSON.stringify(
       {
-        "method": "eth_getblockbynumber",
+        "method": "eth_getBlockByNumber",
         "params": [number, false],
         "id": Math.round(Math.random() * 50) + Math.round(Math.random() * 50),
         "jsonrpc": "2.0"
