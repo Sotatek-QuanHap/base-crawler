@@ -325,11 +325,11 @@ export class BaseJob extends RMQBaseHandle {
     return await this.requestBlockChainByAxios(raw);
   }
 
-  async getBlock(hash: string, retry: number = 0): Promise<Array<ethers.providers.Log>> {
+  async getBlock(number: string, retry: number = 0): Promise<Array<ethers.providers.Log>> {
     const raw = JSON.stringify(
       {
-        "method": "eth_getBlockByHash",
-        "params": [hash, false],
+        "method": "eth_getblockbynumber",
+        "params": [number, false],
         "id": Math.round(Math.random() * 50) + Math.round(Math.random() * 50),
         "jsonrpc": "2.0"
       });
@@ -360,7 +360,7 @@ export class BaseJob extends RMQBaseHandle {
     for (const log of (logs || [])) {
       if (currentBlock != log.blockHash) {
         currentBlock = log.blockHash;
-        block = await this.getBlock(log.blockHash);
+        block = await this.getBlock(this.toHexNumber(log.blockNumber));
       }
       // console.log(log);
       const sumary = {};
