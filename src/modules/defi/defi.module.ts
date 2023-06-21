@@ -19,6 +19,7 @@ import { CreateFundEthereumHandle } from './chains/ethereum/handles/create-fund.
 import { ToggleFundEthereumHandle } from './chains/ethereum/handles/toggle-fund.ethereum.handle';
 import { EthereumJobByRange } from './chains/ethereum/crawler.ethereum.job_by_range';
 import { InvestedFundEthereumHandle } from './chains/ethereum/handles/invest-fund.ethereum.handle';
+import { IndirectDividendPaymentEthereumHandle } from './chains/ethereum/handles/indirect-dividend-payment.ethereum.handle';
 @Module({
   imports: [ShareModule, GatewayModule],
   providers: [
@@ -40,6 +41,7 @@ import { InvestedFundEthereumHandle } from './chains/ethereum/handles/invest-fun
     CreateFundEthereumHandle,
     ToggleFundEthereumHandle,
     InvestedFundEthereumHandle,
+    IndirectDividendPaymentEthereumHandle,
   ],
   exports: [],
 })
