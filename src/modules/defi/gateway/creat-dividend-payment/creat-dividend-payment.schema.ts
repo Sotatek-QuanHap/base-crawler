@@ -2,11 +2,11 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 import { BaseSchema, dbOptionDefault } from 'src/common/database/base.schema';
 
-export type IndirectDividendPaymentDocument =
-  HydratedDocument<IndirectDividendPayment>;
+export type CreatDividendPaymentDocument =
+  HydratedDocument<CreatDividendPayment>;
 
 @Schema(dbOptionDefault)
-export class IndirectDividendPayment extends BaseSchema {
+export class CreatDividendPayment extends BaseSchema {
   @Prop({ lowercase: true })
   root: string;
 
@@ -17,11 +17,10 @@ export class IndirectDividendPayment extends BaseSchema {
   totalAmount: number;
 }
 
-export const IndirectDividendPaymentSchema = SchemaFactory.createForClass(
-  IndirectDividendPayment,
-);
-IndirectDividendPaymentSchema.index(
+export const CreatDividendPaymentSchema =
+  SchemaFactory.createForClass(CreatDividendPayment);
+CreatDividendPaymentSchema.index(
   { chain: 1, hash: 1, logIndex: 1 },
   { unique: true },
 );
-IndirectDividendPaymentSchema.index({ status: 1, turn: 1 });
+CreatDividendPaymentSchema.index({ status: 1, turn: 1 });
