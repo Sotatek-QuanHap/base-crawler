@@ -53,6 +53,12 @@ import { ToggleFundService } from './togglefund/toggle-fund.service';
 import { ToggleFundListener } from './togglefund/toggle-fund.listener';
 import { InvestFund, InvestFundSchema } from './invest-fund/invest-fund.schema';
 import { InvestFundService } from './invest-fund/invest-fund.service';
+import {
+  IndirectDividendPayment,
+  IndirectDividendPaymentSchema,
+} from './indirect-dividend-payment/indirect-dividend-payment.schema';
+import { IndirectDividendPaymentListener } from './indirect-dividend-payment/indirect-dividend-payment.listener';
+import { IndirectDividendPaymentService } from './indirect-dividend-payment/indirect-dividend-payment.service';
 
 @Module({
   imports: [
@@ -72,6 +78,10 @@ import { InvestFundService } from './invest-fund/invest-fund.service';
       { name: CreateFund.name, schema: CreateFundSchema },
       { name: ToggleFund.name, schema: ToggleFundSchema },
       { name: InvestFund.name, schema: InvestFundSchema },
+      {
+        name: IndirectDividendPayment.name,
+        schema: IndirectDividendPaymentSchema,
+      },
     ]),
   ],
   providers: [
@@ -105,6 +115,8 @@ import { InvestFundService } from './invest-fund/invest-fund.service';
     ToggleFundListener,
     InvestFundService,
     InvestListener,
+    IndirectDividendPaymentListener,
+    IndirectDividendPaymentService,
   ],
   exports: [
     TransferSingleService,
@@ -121,6 +133,7 @@ import { InvestFundService } from './invest-fund/invest-fund.service';
     CreateFundService,
     ToggleFundService,
     InvestFundService,
+    IndirectDividendPaymentService,
   ],
 })
 export class GatewayModule {
