@@ -54,11 +54,11 @@ import { ToggleFundListener } from './togglefund/toggle-fund.listener';
 import { InvestFund, InvestFundSchema } from './invest-fund/invest-fund.schema';
 import { InvestFundService } from './invest-fund/invest-fund.service';
 import {
-  IndirectDividendPayment,
-  IndirectDividendPaymentSchema,
-} from './indirect-dividend-payment/indirect-dividend-payment.schema';
-import { IndirectDividendPaymentListener } from './indirect-dividend-payment/indirect-dividend-payment.listener';
-import { IndirectDividendPaymentService } from './indirect-dividend-payment/indirect-dividend-payment.service';
+  CreatDividendPayment,
+  CreatDividendPaymentSchema,
+} from './creat-dividend-payment/creat-dividend-payment.schema';
+import { CreatDividendPaymentListener } from './creat-dividend-payment/creat-dividend-payment.listener';
+import { CreatDividendPaymentService } from './creat-dividend-payment/creat-dividend-payment.service';
 
 @Module({
   imports: [
@@ -79,8 +79,8 @@ import { IndirectDividendPaymentService } from './indirect-dividend-payment/indi
       { name: ToggleFund.name, schema: ToggleFundSchema },
       { name: InvestFund.name, schema: InvestFundSchema },
       {
-        name: IndirectDividendPayment.name,
-        schema: IndirectDividendPaymentSchema,
+        name: CreatDividendPayment.name,
+        schema: CreatDividendPaymentSchema,
       },
     ]),
   ],
@@ -115,8 +115,8 @@ import { IndirectDividendPaymentService } from './indirect-dividend-payment/indi
     ToggleFundListener,
     InvestFundService,
     InvestListener,
-    IndirectDividendPaymentListener,
-    IndirectDividendPaymentService,
+    CreatDividendPaymentListener,
+    CreatDividendPaymentService,
   ],
   exports: [
     TransferSingleService,
@@ -133,7 +133,7 @@ import { IndirectDividendPaymentService } from './indirect-dividend-payment/indi
     CreateFundService,
     ToggleFundService,
     InvestFundService,
-    IndirectDividendPaymentService,
+    CreatDividendPaymentService,
   ],
 })
 export class GatewayModule {
