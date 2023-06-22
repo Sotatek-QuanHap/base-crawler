@@ -8,7 +8,7 @@ export type CreatDividendPaymentDocument =
 @Schema(dbOptionDefault)
 export class CreatDividendPayment extends BaseSchema {
   @Prop({ lowercase: true })
-  issuers: string;
+  issuer: string;
 
   @Prop({})
   totalAmount: number;
@@ -21,6 +21,9 @@ export class CreatDividendPayment extends BaseSchema {
 
   @Prop({ lowercase: true })
   root: string;
+
+  @Prop({})
+  uuid: number;
 }
 
 export const CreatDividendPaymentSchema =
