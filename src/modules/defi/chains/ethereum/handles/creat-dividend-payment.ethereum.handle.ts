@@ -6,7 +6,7 @@ import { CancelLoanService } from 'src/modules/defi/gateway/cancel-loan/cancel-l
 @Injectable()
 export class CreatDividendPaymentEthereumHandle extends TransferSingleBaseHandle {
   constructor(configService: ConfigService, service: CancelLoanService) {
-    super('creatDividendPayment', configService, service);
+    super('CreatedDividendPayment', configService, service);
     this.abi = creatDividendPaymentABI;
     this.mappings = [
       { key: 'issuer', convert: undefined },
@@ -16,6 +16,6 @@ export class CreatDividendPaymentEthereumHandle extends TransferSingleBaseHandle
       { key: 'root', convert: undefined },
       { key: 'uuid', convert: this.toNumber },
     ];
-    this.logNames = ['creatDividendPayment'];
+    this.logNames = ['CreatedDividendPayment'];
   }
 }
