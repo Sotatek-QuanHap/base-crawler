@@ -59,6 +59,12 @@ import {
 } from './creat-dividend-payment/creat-dividend-payment.schema';
 import { CreatDividendPaymentListener } from './creat-dividend-payment/creat-dividend-payment.listener';
 import { CreatDividendPaymentService } from './creat-dividend-payment/creat-dividend-payment.service';
+import {
+  CancelInvestment,
+  CancelInvestmentSchema,
+} from './cancel-investment/cancel-investment.schema';
+import { CancelInvestmentListener } from './cancel-investment/cancel-investment.listener';
+import { CancelInvestmentService } from './cancel-investment/cancel-investment.service';
 
 @Module({
   imports: [
@@ -82,6 +88,7 @@ import { CreatDividendPaymentService } from './creat-dividend-payment/creat-divi
         name: CreatDividendPayment.name,
         schema: CreatDividendPaymentSchema,
       },
+      { name: CancelInvestment.name, schema: CancelInvestmentSchema },
     ]),
   ],
   providers: [
@@ -115,8 +122,10 @@ import { CreatDividendPaymentService } from './creat-dividend-payment/creat-divi
     ToggleFundListener,
     InvestFundService,
     InvestListener,
-    CreatDividendPaymentListener,
     CreatDividendPaymentService,
+    CreatDividendPaymentListener,
+    CancelInvestmentService,
+    CancelInvestmentListener,
   ],
   exports: [
     TransferSingleService,
@@ -134,6 +143,7 @@ import { CreatDividendPaymentService } from './creat-dividend-payment/creat-divi
     ToggleFundService,
     InvestFundService,
     CreatDividendPaymentService,
+    CancelInvestmentService,
   ],
 })
 export class GatewayModule {
