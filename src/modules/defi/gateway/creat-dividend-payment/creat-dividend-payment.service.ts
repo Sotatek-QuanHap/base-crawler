@@ -19,11 +19,11 @@ export class CreatDividendPaymentService extends BaseService<CreatDividendPaymen
       configService,
       configService.get<string>(
         'queue_creat_dividend_payment'.toLocaleLowerCase(),
-        'creat-dividend-payment',
+        'creat_dividend_payment',
       ),
       configService.get<string>(
         'queue_creat_dividend_payment_callback'.toLocaleLowerCase(),
-        'creat-dividend-payment-callback',
+        'creat_dividend_payment_callback',
       ),
       CreatDividendPaymentModel,
     );
