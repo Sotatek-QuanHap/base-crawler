@@ -2,10 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TransferSingleBaseHandle } from 'src/modules/defi/handles/transfer-single.base.handle';
 import creatDividendPaymentABI from './abis/creat-dividend-payment.abi.json';
-import { CancelLoanService } from 'src/modules/defi/gateway/cancel-loan/cancel-loan.service';
+import { CreatDividendPaymentService } from 'src/modules/defi/gateway/creat-dividend-payment/creat-dividend-payment.service';
 @Injectable()
 export class CreatDividendPaymentEthereumHandle extends TransferSingleBaseHandle {
-  constructor(configService: ConfigService, service: CancelLoanService) {
+  constructor(
+    configService: ConfigService,
+    service: CreatDividendPaymentService,
+  ) {
     super('CreatedDividendPayment', configService, service);
     this.abi = creatDividendPaymentABI;
     this.mappings = [
