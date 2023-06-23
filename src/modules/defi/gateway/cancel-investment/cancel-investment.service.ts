@@ -21,11 +21,11 @@ export class CancelInvestmentService extends BaseService<CancelInvestmentDocumen
       configService,
       configService.get<string>(
         'queue_cancel_investment'.toLocaleLowerCase(),
-        'cancel-investment',
+        'cancel_investment',
       ),
       configService.get<string>(
         'queue_cancel_investment_callback'.toLocaleLowerCase(),
-        'cancel-investment-callback',
+        'cancel_investment_callback',
       ),
       cancelInvestmentModel,
     );
