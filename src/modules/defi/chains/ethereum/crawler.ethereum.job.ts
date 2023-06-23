@@ -24,6 +24,7 @@ import { PaymentEthereumHandle } from './handles/payment.ethereum.handle';
 import { CreateFundEthereumHandle } from './handles/create-fund.ethereum.handle';
 import { CreatDividendPaymentEthereumHandle } from './handles/creat-dividend-payment.ethereum.handle';
 import { CancelInvestmentEthereumHandle } from './handles/cancel-investment.ethereum.handle';
+import { RedeemFundEthereumHandle } from './handles/redeem-fund.ethereum.handle';
 
 @Injectable()
 export class EthereumJob extends BaseJob {
@@ -47,6 +48,7 @@ export class EthereumJob extends BaseJob {
     private investedFundEthereumHandle: InvestedFundEthereumHandle,
     private creatDividendPaymentHandle: CreatDividendPaymentEthereumHandle,
     private cancelInvestmentHandle: CancelInvestmentEthereumHandle,
+    private redeemFundHandle: RedeemFundEthereumHandle,
   ) {
     super(configService, crawlerInfoModel);
     this.chain = 'ethereum';
@@ -68,6 +70,7 @@ export class EthereumJob extends BaseJob {
       this.investedFundEthereumHandle,
       this.creatDividendPaymentHandle,
       this.cancelInvestmentHandle,
+      this.redeemFundHandle,
     ];
   }
 }
