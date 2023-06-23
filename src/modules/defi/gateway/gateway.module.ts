@@ -65,6 +65,9 @@ import {
 } from './cancel-investment/cancel-investment.schema';
 import { CancelInvestmentListener } from './cancel-investment/cancel-investment.listener';
 import { CancelInvestmentService } from './cancel-investment/cancel-investment.service';
+import { RedeemFund, RedeemFundSchema } from './redeem-fund/redeem-fund.schema';
+import { RedeemFundService } from './redeem-fund/redeem-fund.service';
+import { RedeemFundListener } from './redeem-fund/redeem-fund.listener';
 
 @Module({
   imports: [
@@ -89,6 +92,10 @@ import { CancelInvestmentService } from './cancel-investment/cancel-investment.s
         schema: CreatDividendPaymentSchema,
       },
       { name: CancelInvestment.name, schema: CancelInvestmentSchema },
+      {
+        name: RedeemFund.name,
+        schema: RedeemFundSchema,
+      },
     ]),
   ],
   providers: [
@@ -126,6 +133,8 @@ import { CancelInvestmentService } from './cancel-investment/cancel-investment.s
     CreatDividendPaymentListener,
     CancelInvestmentService,
     CancelInvestmentListener,
+    RedeemFundService,
+    RedeemFundListener,
   ],
   exports: [
     TransferSingleService,
@@ -144,6 +153,7 @@ import { CancelInvestmentService } from './cancel-investment/cancel-investment.s
     InvestFundService,
     CreatDividendPaymentService,
     CancelInvestmentService,
+    RedeemFundService,
   ],
 })
 export class GatewayModule {
