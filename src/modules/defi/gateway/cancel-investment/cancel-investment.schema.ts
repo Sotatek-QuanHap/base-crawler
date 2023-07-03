@@ -10,7 +10,16 @@ export class CancelInvestment extends BaseSchema {
   account: string;
 
   @Prop({})
-  nonce: number;
+  subscriptionDate: number;
+
+  @Prop({})
+  amount: number;
+
+  @Prop({})
+  signingTime: number;
+
+  @Prop({})
+  hashInfo: string;
 }
 
 export const CancelInvestmentSchema =

@@ -14,7 +14,10 @@ export class CancelInvestmentEthereumHandle extends TransferSingleBaseHandle {
     this.abi = CancelInvestmentABI;
     this.mappings = [
       { key: 'account', convert: undefined },
-      { key: 'nonce', convert: this.toNumber },
+      { key: 'subscriptionDate', convert: this.toNumber },
+      { key: 'amount', convert: this.toNumber },
+      { key: 'signingTime', convert: this.toNumber },
+      { key: 'hashInfo', convert: undefined },
     ];
     this.logNames = ['Cancel'];
   }
