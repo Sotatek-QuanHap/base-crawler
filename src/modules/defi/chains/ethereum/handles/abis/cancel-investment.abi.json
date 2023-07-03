@@ -11,8 +11,26 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "nonce",
+        "name": "subscriptionDate",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "signingTime",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "hashInfo",
+        "type": "bytes32"
       }
     ],
     "name": "Cancel",
