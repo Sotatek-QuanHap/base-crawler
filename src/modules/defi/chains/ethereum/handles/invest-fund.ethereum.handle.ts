@@ -16,8 +16,12 @@ export class InvestedFundEthereumHandle extends TransferSingleBaseHandle {
     this.mappings = [
       { key: 'sender', convert: undefined },
       { key: 'fund', convert: undefined },
+      { key: 'subscriptionDate', convert: this.toNumber },
       { key: 'amount', convert: this.toNumber },
-      { key: 'issuer', convert: undefined },
+      { key: 'timstamp', convert: this.toNumber },
+      { key: 'expirationTime', convert: this.toNumber },
+      { key: 'beneficiary', convert: undefined },
+      { key: 'hashInfo', convert: undefined },
     ];
     this.logNames = ['Invested'];
   }

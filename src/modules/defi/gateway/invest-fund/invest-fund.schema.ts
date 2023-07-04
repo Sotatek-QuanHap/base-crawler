@@ -13,10 +13,22 @@ export class InvestFund extends BaseSchema {
   fund: string;
 
   @Prop({})
+  subscriptionDate: number;
+
+  @Prop({})
   amount: number;
 
+  @Prop({})
+  timstamp: number;
+
+  @Prop({})
+  expirationTime: number;
+
   @Prop({ lowercase: true })
-  issuer: string;
+  beneficiary: string;
+
+  @Prop({})
+  hashInfo: string;
 }
 
 export const InvestFundSchema = SchemaFactory.createForClass(InvestFund);
