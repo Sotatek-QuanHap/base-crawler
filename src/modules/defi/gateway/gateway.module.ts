@@ -8,15 +8,30 @@ import {
   TransferSingleSchema,
 } from './mintnft/transfer-single.schema';
 import { TransferSingleService } from './mintnft/transfer-single.service';
+import {
+  LoanCreated,
+  LoanCreatedSchema,
+} from './loan-created/loan-created.schema';
+import { LoanCreatedService } from './loan-created/loan-created.service';
+import { LoanCreatedListener } from './loan-created/loan-created.listener';
+import { LoadHash } from './loadHash.service';
 @Module({
   imports: [
     ShareModule,
     MongooseModule.forFeature([
       { name: TransferSingle.name, schema: TransferSingleSchema },
+      { name: LoanCreated.name, schema: LoanCreatedSchema },
     ]),
   ],
-  providers: [ConfigService, TransferSingleService, TransferSingleListener],
-  exports: [TransferSingleService],
+  providers: [
+    ConfigService,
+    LoadHash,
+    TransferSingleService,
+    TransferSingleListener,
+    LoanCreatedService,
+    LoanCreatedListener,
+  ],
+  exports: [TransferSingleService, LoanCreatedService],
 })
 export class GatewayModule {
   // constructor(private transferSingleListener: TransferSingleListener) {

@@ -5,7 +5,7 @@ import { Store } from 'src/rabbitmq/store';
 import { TimeUtils } from 'src/utils/time.utils';
 
 @Injectable()
-export class loadHash {
+export class LoadHash {
   private provider: ethers.providers.JsonRpcProvider;
   private network: ethers.providers.Network;
   private chain = 'ethereum';
