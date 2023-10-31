@@ -1,7 +1,3 @@
-import { InvestedFundEthereumHandle } from './handles/invest-fund.ethereum.handle';
-import { ToggleFundEthereumHandle } from './handles/toggle-fund.ethereum.handle';
-import { CloseLoanEthereumHandle } from './handles/close-loan.ethereum.handle';
-import { WithdrawEthereumHandle } from './handles/withdraw-loan.ethereum.handle';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
@@ -11,20 +7,7 @@ import {
   CrawlerInfoDocument,
 } from 'src/common/database/crawler.schema';
 import { BaseJob } from 'src/rabbitmq/base.job';
-import { CreateLoanEthereumHandle } from './handles/create-loan.ethereum.handle';
-import { LinkProxyEthereumHandle } from './handles/link-proxy.ethereum.handle';
 import { TransferSingleEthereumHandle } from './handles/transfer-single.ethereum.handle';
-import { InvestEthereumHandle } from './handles/invest.ethereum.handle';
-import { CreateMultiTrancheEthereumHandle } from './handles/create-multi-tranche.ethereum.handle';
-import { CreateUniTrancheEthereumHandle } from './handles/create-uni-tranche.ethereum.handle';
-import { DrawdownEthereumHandle } from './handles/drawdown.ethereum.handle';
-import { CreateCreditLineHandle } from './handles/create-credit-line.ethereum.handle';
-import { CancelLoanEthereumHandle } from './handles/cancel-loan.ethereum.handle';
-import { PaymentEthereumHandle } from './handles/payment.ethereum.handle';
-import { CreateFundEthereumHandle } from './handles/create-fund.ethereum.handle';
-import { CreatDividendPaymentEthereumHandle } from './handles/creat-dividend-payment.ethereum.handle';
-import { CancelInvestmentEthereumHandle } from './handles/cancel-investment.ethereum.handle';
-import { RedeemFundEthereumHandle } from './handles/redeem-fund.ethereum.handle';
 
 @Injectable()
 export class EthereumJob extends BaseJob {
@@ -32,45 +15,9 @@ export class EthereumJob extends BaseJob {
     configService: ConfigService,
     @InjectModel(CrawlerInfo.name) crawlerInfoModel: Model<CrawlerInfoDocument>,
     private transferSingleEthereumHandle: TransferSingleEthereumHandle,
-    private createLoanEthereumHandle: CreateLoanEthereumHandle,
-    private linkProxyEthereumHandle: LinkProxyEthereumHandle,
-    private withdrawEthereumHandle: WithdrawEthereumHandle,
-    private InvestHandle: InvestEthereumHandle,
-    private createMultiTrancheEthereumHandle: CreateMultiTrancheEthereumHandle,
-    private createUniTrancheEthereumHandle: CreateUniTrancheEthereumHandle,
-    private drawdownEthereumHandle: DrawdownEthereumHandle,
-    private createCreditLineHandle: CreateCreditLineHandle,
-    private cancelLoanEthereumHandle: CancelLoanEthereumHandle,
-    private paymentEthereumHandle: PaymentEthereumHandle,
-    private closeLoanEthereumHandle: CloseLoanEthereumHandle,
-    private createFundEthereumHandle: CreateFundEthereumHandle,
-    private toggleFundEthereumHandle: ToggleFundEthereumHandle,
-    private investedFundEthereumHandle: InvestedFundEthereumHandle,
-    private creatDividendPaymentHandle: CreatDividendPaymentEthereumHandle,
-    private cancelInvestmentHandle: CancelInvestmentEthereumHandle,
-    private redeemFundHandle: RedeemFundEthereumHandle,
   ) {
     super(configService, crawlerInfoModel);
     this.chain = 'ethereum';
-    this.handles = [
-      this.transferSingleEthereumHandle,
-      this.createLoanEthereumHandle,
-      this.linkProxyEthereumHandle,
-      this.withdrawEthereumHandle,
-      this.InvestHandle,
-      this.createMultiTrancheEthereumHandle,
-      this.createUniTrancheEthereumHandle,
-      this.drawdownEthereumHandle,
-      this.createCreditLineHandle,
-      this.cancelLoanEthereumHandle,
-      this.paymentEthereumHandle,
-      this.closeLoanEthereumHandle,
-      this.createFundEthereumHandle,
-      this.toggleFundEthereumHandle,
-      this.investedFundEthereumHandle,
-      this.creatDividendPaymentHandle,
-      this.cancelInvestmentHandle,
-      this.redeemFundHandle,
-    ];
+    this.handles = [this.transferSingleEthereumHandle];
   }
 }
