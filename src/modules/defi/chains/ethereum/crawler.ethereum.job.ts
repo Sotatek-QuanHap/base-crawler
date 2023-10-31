@@ -1,3 +1,4 @@
+import { LoanCreatedEthereumHandle } from './handles/loan-created.ethereum.handle';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
@@ -15,9 +16,13 @@ export class EthereumJob extends BaseJob {
     configService: ConfigService,
     @InjectModel(CrawlerInfo.name) crawlerInfoModel: Model<CrawlerInfoDocument>,
     private transferSingleEthereumHandle: TransferSingleEthereumHandle,
+    private loanCreatedEthereumHandle: LoanCreatedEthereumHandle,
   ) {
     super(configService, crawlerInfoModel);
     this.chain = 'ethereum';
-    this.handles = [this.transferSingleEthereumHandle];
+    this.handles = [
+      this.transferSingleEthereumHandle,
+      this.loanCreatedEthereumHandle,
+    ];
   }
 }
