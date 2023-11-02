@@ -15,12 +15,16 @@ import {
 import { LoanCreatedService } from './loan-created/loan-created.service';
 import { LoanCreatedListener } from './loan-created/loan-created.listener';
 import { LoadHash } from './loadHash.service';
+import { Invested, InvestedSchema } from './invested/invested.schema';
+import { InvestedListener } from './invested/invested.listener';
+import { InvestedService } from './invested/invested.service';
 @Module({
   imports: [
     ShareModule,
     MongooseModule.forFeature([
       { name: TransferSingle.name, schema: TransferSingleSchema },
       { name: LoanCreated.name, schema: LoanCreatedSchema },
+      { name: Invested.name, schema: InvestedSchema },
     ]),
   ],
   providers: [
@@ -30,8 +34,10 @@ import { LoadHash } from './loadHash.service';
     TransferSingleListener,
     LoanCreatedService,
     LoanCreatedListener,
+    InvestedService,
+    InvestedListener,
   ],
-  exports: [TransferSingleService, LoanCreatedService],
+  exports: [TransferSingleService, LoanCreatedService, InvestedService],
 })
 export class GatewayModule {
   // constructor(private transferSingleListener: TransferSingleListener) {

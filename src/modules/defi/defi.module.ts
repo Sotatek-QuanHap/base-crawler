@@ -7,6 +7,7 @@ import { GatewayModule } from './gateway/gateway.module';
 
 import { EthereumJobByRange } from './chains/ethereum/crawler.ethereum.job_by_range';
 import { LoanCreatedEthereumHandle } from './chains/ethereum/handles/loan-created.ethereum.handle';
+import { InvestedEthereumHandle } from './chains/ethereum/handles/invested.ethereum.handle';
 
 @Module({
   imports: [ShareModule, GatewayModule],
@@ -16,6 +17,7 @@ import { LoanCreatedEthereumHandle } from './chains/ethereum/handles/loan-create
     EthereumJobByRange,
     TransferSingleEthereumHandle,
     LoanCreatedEthereumHandle,
+    InvestedEthereumHandle,
   ],
   exports: [],
 })

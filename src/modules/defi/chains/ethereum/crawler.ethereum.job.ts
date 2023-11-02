@@ -9,6 +9,7 @@ import {
 } from 'src/common/database/crawler.schema';
 import { BaseJob } from 'src/rabbitmq/base.job';
 import { TransferSingleEthereumHandle } from './handles/transfer-single.ethereum.handle';
+import { InvestedEthereumHandle } from './handles/invested.ethereum.handle';
 
 @Injectable()
 export class EthereumJob extends BaseJob {
@@ -17,12 +18,14 @@ export class EthereumJob extends BaseJob {
     @InjectModel(CrawlerInfo.name) crawlerInfoModel: Model<CrawlerInfoDocument>,
     private transferSingleEthereumHandle: TransferSingleEthereumHandle,
     private loanCreatedEthereumHandle: LoanCreatedEthereumHandle,
+    private investedEthereumHandle: InvestedEthereumHandle,
   ) {
     super(configService, crawlerInfoModel);
     this.chain = 'ethereum';
     this.handles = [
       this.transferSingleEthereumHandle,
       this.loanCreatedEthereumHandle,
+      this.investedEthereumHandle,
     ];
   }
 }
