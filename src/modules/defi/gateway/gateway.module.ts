@@ -18,6 +18,8 @@ import { LoadHash } from './loadHash.service';
 import { Invested, InvestedSchema } from './invested/invested.schema';
 import { InvestedListener } from './invested/invested.listener';
 import { InvestedService } from './invested/invested.service';
+import { Repayment, RepaymentSchema } from './repayment/repayment.schema';
+import { RepaymentService } from './repayment/repayment.service';
 @Module({
   imports: [
     ShareModule,
@@ -25,6 +27,7 @@ import { InvestedService } from './invested/invested.service';
       { name: TransferSingle.name, schema: TransferSingleSchema },
       { name: LoanCreated.name, schema: LoanCreatedSchema },
       { name: Invested.name, schema: InvestedSchema },
+      { name: Repayment.name, schema: RepaymentSchema },
     ]),
   ],
   providers: [
@@ -36,8 +39,15 @@ import { InvestedService } from './invested/invested.service';
     LoanCreatedListener,
     InvestedService,
     InvestedListener,
+    RepaymentService,
   ],
-  exports: [TransferSingleService, LoanCreatedService, InvestedService],
+  exports: [
+    TransferSingleService,
+    LoanCreatedService,
+    InvestedService,
+    RepaymentService,
+    LoadHash,
+  ],
 })
 export class GatewayModule {
   // constructor(private transferSingleListener: TransferSingleListener) {

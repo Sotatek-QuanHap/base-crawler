@@ -1,3 +1,4 @@
+import { TransactionResponse } from '@ethersproject/abstract-provider';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ethers } from 'ethers';
@@ -17,7 +18,7 @@ export class LoadHash {
     this.loadProvider();
   }
 
-  async getTransaction(hash: string): Promise<any> {
+  async getTransaction(hash: string): Promise<TransactionResponse> {
     while (true) {
       try {
         return await this.provider.getTransaction(hash);
@@ -25,6 +26,46 @@ export class LoadHash {
         console.log('error at get transaction', hash, error);
         await TimeUtils.sleep(Math.round(Math.random() * 3000 + 1000));
         await this.loadProvider();
+      }
+    }
+  }
+
+  async getTransactionReceipt(
+    hash: string,
+  ): Promise<ethers.providers.TransactionReceipt> {
+    while (true) {
+      try {
+        return await this.provider.getTransactionReceipt(hash);
+      } catch (error) {
+        console.log('error at get transaction receipt', hash, error);
+        await TimeUtils.sleep(Math.round(Math.random() * 3000 + 1000));
+        await this.loadProvider();
+      }
+    }
+  }
+
+  async getTimestampBlockNumber(block: number): Promise<number> {
+    while (true) {
+      try {
+        return (await this.provider.getBlock(block)).timestamp;
+      } catch (error) {
+        console.log('error at get timestamp for block number', block, error);
+        await TimeUtils.sleep(Math.round(Math.random() * 3000 + 1000));
+        await this.loadProvider();
+      }
+    }
+  }
+
+  async parseLogs(logs: any, abi: any): Promise<any> {
+    const logInterface: ethers.utils.Interface = new ethers.utils.Interface(
+      abi,
+    );
+    for (const log of logs) {
+      try {
+        const rs = logInterface.parseLog(log);
+        return { ...rs, logIndex: log.logIndex };
+      } catch (error) {
+        console.log('error at parseLog', error);
       }
     }
   }
