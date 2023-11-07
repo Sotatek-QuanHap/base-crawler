@@ -8,6 +8,7 @@ import { GatewayModule } from './gateway/gateway.module';
 import { EthereumJobByRange } from './chains/ethereum/crawler.ethereum.job_by_range';
 import { LoanCreatedEthereumHandle } from './chains/ethereum/handles/loan-created.ethereum.handle';
 import { InvestedEthereumHandle } from './chains/ethereum/handles/invested.ethereum.handle';
+import { RepaymentEthereumHandle } from './chains/ethereum/handles/repayment.ethereum.handle';
 
 @Module({
   imports: [ShareModule, GatewayModule],
@@ -18,6 +19,7 @@ import { InvestedEthereumHandle } from './chains/ethereum/handles/invested.ether
     TransferSingleEthereumHandle,
     LoanCreatedEthereumHandle,
     InvestedEthereumHandle,
+    RepaymentEthereumHandle,
   ],
   exports: [],
 })
@@ -25,6 +27,7 @@ export class DefiModule {
   constructor(
     private ethereumJob: EthereumJob,
     private ethereumJobByRange: EthereumJobByRange,
+    private repaymentEthereumHandle: RepaymentEthereumHandle,
   ) {
     this.ethereumJob.listen();
     this.ethereumJobByRange.setHandlers(this.ethereumJob.getHandlers());
@@ -33,5 +36,6 @@ export class DefiModule {
       this.ethereumJobByRange.getQueueName(),
     );
     this.ethereumJobByRange.listen();
+    this.repaymentEthereumHandle.listen();
   }
 }
