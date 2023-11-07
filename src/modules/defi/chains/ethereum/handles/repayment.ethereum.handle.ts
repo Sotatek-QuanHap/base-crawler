@@ -41,7 +41,7 @@ export class RepaymentEthereumHandle extends BaseJob {
   getQueueName(): string {
     this.queueName = this.configService.get(
       `QUEUE_REQUEST_REPAYMENT_REQUEST`.toUpperCase(),
-      `repayment_request`,
+      `repayment-request`,
     );
     return this.queueName;
   }
