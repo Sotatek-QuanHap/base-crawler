@@ -20,6 +20,12 @@ import { InvestedListener } from './invested/invested.listener';
 import { InvestedService } from './invested/invested.service';
 import { Repayment, RepaymentSchema } from './repayment/repayment.schema';
 import { RepaymentService } from './repayment/repayment.service';
+import {
+  RepaymentReceiptsConfirmed,
+  RepaymentReceiptsConfirmedSchema,
+} from './repayment-receipts-confirmed/repayment-receipts-confirmed.schema';
+import { RepaymentReceiptsConfirmedService } from './repayment-receipts-confirmed/repayment-receipts-confirmed.service';
+import { RepaymentReceiptsConfirmedListener } from './repayment-receipts-confirmed/repayment-receipts-confirmed.listener';
 @Module({
   imports: [
     ShareModule,
@@ -28,6 +34,10 @@ import { RepaymentService } from './repayment/repayment.service';
       { name: LoanCreated.name, schema: LoanCreatedSchema },
       { name: Invested.name, schema: InvestedSchema },
       { name: Repayment.name, schema: RepaymentSchema },
+      {
+        name: RepaymentReceiptsConfirmed.name,
+        schema: RepaymentReceiptsConfirmedSchema,
+      },
     ]),
   ],
   providers: [
@@ -40,12 +50,15 @@ import { RepaymentService } from './repayment/repayment.service';
     InvestedService,
     InvestedListener,
     RepaymentService,
+    RepaymentReceiptsConfirmedService,
+    RepaymentReceiptsConfirmedListener,
   ],
   exports: [
     TransferSingleService,
     LoanCreatedService,
     InvestedService,
     RepaymentService,
+    RepaymentReceiptsConfirmedService,
     LoadHash,
   ],
 })

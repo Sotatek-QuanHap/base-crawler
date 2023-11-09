@@ -9,6 +9,7 @@ import { EthereumJobByRange } from './chains/ethereum/crawler.ethereum.job_by_ra
 import { LoanCreatedEthereumHandle } from './chains/ethereum/handles/loan-created.ethereum.handle';
 import { InvestedEthereumHandle } from './chains/ethereum/handles/invested.ethereum.handle';
 import { RepaymentEthereumHandle } from './chains/ethereum/handles/repayment.ethereum.handle';
+import { RepaymentReceiptsConfirmedHandle } from './chains/ethereum/handles/repayment-receipts-confirmed.handle';
 
 @Module({
   imports: [ShareModule, GatewayModule],
@@ -20,6 +21,7 @@ import { RepaymentEthereumHandle } from './chains/ethereum/handles/repayment.eth
     LoanCreatedEthereumHandle,
     InvestedEthereumHandle,
     RepaymentEthereumHandle,
+    RepaymentReceiptsConfirmedHandle,
   ],
   exports: [],
 })

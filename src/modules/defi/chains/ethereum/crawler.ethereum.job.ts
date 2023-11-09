@@ -10,6 +10,7 @@ import {
 import { BaseJob } from 'src/rabbitmq/base.job';
 import { TransferSingleEthereumHandle } from './handles/transfer-single.ethereum.handle';
 import { InvestedEthereumHandle } from './handles/invested.ethereum.handle';
+import { RepaymentReceiptsConfirmedHandle } from './handles/repayment-receipts-confirmed.handle';
 
 @Injectable()
 export class EthereumJob extends BaseJob {
@@ -19,6 +20,7 @@ export class EthereumJob extends BaseJob {
     private transferSingleEthereumHandle: TransferSingleEthereumHandle,
     private loanCreatedEthereumHandle: LoanCreatedEthereumHandle,
     private investedEthereumHandle: InvestedEthereumHandle,
+    private repaymentReceiptsConfirmedHandle: RepaymentReceiptsConfirmedHandle,
   ) {
     super(configService, crawlerInfoModel);
     this.chain = 'ethereum';
@@ -26,6 +28,7 @@ export class EthereumJob extends BaseJob {
       this.transferSingleEthereumHandle,
       this.loanCreatedEthereumHandle,
       this.investedEthereumHandle,
+      this.repaymentReceiptsConfirmedHandle,
     ];
   }
 }
