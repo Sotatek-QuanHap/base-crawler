@@ -101,6 +101,7 @@ export class RepaymentEthereumHandle extends BaseJob {
       );
       data.block = getTransaction.blockNumber;
       data.requestId = requestId;
+      data.status = 1;
       await this.repaymentService.create(data);
     }
   }
