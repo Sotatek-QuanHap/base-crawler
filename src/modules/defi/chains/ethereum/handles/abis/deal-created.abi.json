@@ -4,20 +4,20 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "contract IHelixLoan",
-        "name": "loan",
+        "internalType": "contract IHelixDeal",
+        "name": "deal",
         "type": "address"
       },
       {
         "indexed": true,
         "internalType": "address",
-        "name": "loanWallet",
+        "name": "dealWallet",
         "type": "address"
       },
       {
         "indexed": true,
         "internalType": "address",
-        "name": "loanManager",
+        "name": "dealManager",
         "type": "address"
       },
       {
@@ -33,7 +33,7 @@
         "type": "uint256"
       }
     ],
-    "name": "LoanCreated",
+    "name": "DealCreated",
     "type": "event"
   }
 ]

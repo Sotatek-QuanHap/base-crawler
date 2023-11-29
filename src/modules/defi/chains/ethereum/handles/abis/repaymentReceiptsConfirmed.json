@@ -16,7 +16,7 @@
       },
       {
         "indexed": false,
-        "internalType": "enum IHelixLoan.RepaymentTransactionType",
+        "internalType": "enum IHelixDeal.RepaymentTransactionType",
         "name": "txType",
         "type": "uint8"
       },

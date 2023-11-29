@@ -20,7 +20,7 @@ export class InvestedEthereumHandle extends TransferSingleBaseHandle {
       { key: 'amount', convert: this.toNumber },
       { key: 'salt', convert: this.toNumber },
       { key: 'expirationTime', convert: this.toNumber },
-      { key: 'loanWallet', convert: undefined },
+      { key: 'dealWallet', convert: undefined },
       { key: 'investmentHash', convert: undefined },
     ];
     this.logNames = ['Invested'];
