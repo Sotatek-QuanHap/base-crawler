@@ -9,11 +9,11 @@ import {
 } from './mintnft/transfer-single.schema';
 import { TransferSingleService } from './mintnft/transfer-single.service';
 import {
-  LoanCreated,
-  LoanCreatedSchema,
-} from './loan-created/loan-created.schema';
-import { LoanCreatedService } from './loan-created/loan-created.service';
-import { LoanCreatedListener } from './loan-created/loan-created.listener';
+  DealCreated,
+  DealCreatedSchema,
+} from './deal-created/deal-created.schema';
+import { DealCreatedService } from './deal-created/deal-created.service';
+import { DealCreatedListener } from './deal-created/deal-created.listener';
 import { LoadHash } from './loadHash.service';
 import { Invested, InvestedSchema } from './invested/invested.schema';
 import { InvestedListener } from './invested/invested.listener';
@@ -31,7 +31,7 @@ import { RepaymentReceiptsConfirmedListener } from './repayment-receipts-confirm
     ShareModule,
     MongooseModule.forFeature([
       { name: TransferSingle.name, schema: TransferSingleSchema },
-      { name: LoanCreated.name, schema: LoanCreatedSchema },
+      { name: DealCreated.name, schema: DealCreatedSchema },
       { name: Invested.name, schema: InvestedSchema },
       { name: Repayment.name, schema: RepaymentSchema },
       {
@@ -45,8 +45,8 @@ import { RepaymentReceiptsConfirmedListener } from './repayment-receipts-confirm
     LoadHash,
     TransferSingleService,
     TransferSingleListener,
-    LoanCreatedService,
-    LoanCreatedListener,
+    DealCreatedService,
+    DealCreatedListener,
     InvestedService,
     InvestedListener,
     RepaymentService,
@@ -55,7 +55,7 @@ import { RepaymentReceiptsConfirmedListener } from './repayment-receipts-confirm
   ],
   exports: [
     TransferSingleService,
-    LoanCreatedService,
+    DealCreatedService,
     InvestedService,
     RepaymentService,
     RepaymentReceiptsConfirmedService,

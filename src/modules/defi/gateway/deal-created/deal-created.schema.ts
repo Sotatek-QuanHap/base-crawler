@@ -2,21 +2,21 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 import { BaseSchema, dbOptionDefault } from 'src/common/database/base.schema';
 
-export type LoanCreatedDocument = HydratedDocument<LoanCreated>;
+export type DealCreatedDocument = HydratedDocument<DealCreated>;
 
 @Schema(dbOptionDefault)
-export class LoanCreated extends BaseSchema {
+export class DealCreated extends BaseSchema {
   @Prop({})
   id: number;
 
   @Prop({ lowercase: true })
-  loan: string;
+  deal: string;
 
   @Prop({ lowercase: true })
-  loanWallet: string;
+  dealWallet: string;
 
   @Prop({ lowercase: true })
-  loanManager: string;
+  dealManager: string;
 
   @Prop({ lowercase: true })
   borrower: string;
@@ -28,6 +28,6 @@ export class LoanCreated extends BaseSchema {
   dbPrjId: number;
 }
 
-export const LoanCreatedSchema = SchemaFactory.createForClass(LoanCreated);
-LoanCreatedSchema.index({ chain: 1, hash: 1, logIndex: 1 }, { unique: true });
-LoanCreatedSchema.index({ status: 1, turn: 1 });
+export const DealCreatedSchema = SchemaFactory.createForClass(DealCreated);
+DealCreatedSchema.index({ chain: 1, hash: 1, logIndex: 1 }, { unique: true });
+DealCreatedSchema.index({ status: 1, turn: 1 });

@@ -3,28 +3,28 @@ import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { BaseService } from 'src/rabbitmq/base.service';
-import { LoanCreated, LoanCreatedDocument } from './loan-created.schema';
+import { DealCreated, DealCreatedDocument } from './deal-created.schema';
 import { LoadHash } from '../loadHash.service';
 
 @Injectable()
-export class LoanCreatedService extends BaseService<LoanCreatedDocument> {
+export class DealCreatedService extends BaseService<DealCreatedDocument> {
   constructor(
     configService: ConfigService,
-    @InjectModel(LoanCreated.name)
-    loanCreatedModel: Model<LoanCreatedDocument>,
+    @InjectModel(DealCreated.name)
+    dealCreatedModel: Model<DealCreatedDocument>,
     private loadHash: LoadHash,
   ) {
     super(
       configService,
       configService.get<string>(
-        'queue_loan_created'.toLocaleLowerCase(),
-        'loan-created',
+        'queue_deal_created'.toLocaleLowerCase(),
+        'deal-created',
       ),
       configService.get<string>(
-        'queue_loan_created_callback'.toLocaleLowerCase(),
-        'loan-created-callback',
+        'queue_deal_created_callback'.toLocaleLowerCase(),
+        'deal-created-callback',
       ),
-      loanCreatedModel,
+      dealCreatedModel,
     );
   }
 

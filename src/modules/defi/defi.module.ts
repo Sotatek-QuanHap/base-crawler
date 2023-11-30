@@ -6,7 +6,7 @@ import { TransferSingleEthereumHandle } from './chains/ethereum/handles/transfer
 import { GatewayModule } from './gateway/gateway.module';
 
 import { EthereumJobByRange } from './chains/ethereum/crawler.ethereum.job_by_range';
-import { LoanCreatedEthereumHandle } from './chains/ethereum/handles/loan-created.ethereum.handle';
+import { DealCreatedEthereumHandle } from './chains/ethereum/handles/deal-created.ethereum.handle';
 import { InvestedEthereumHandle } from './chains/ethereum/handles/invested.ethereum.handle';
 import { RepaymentEthereumHandle } from './chains/ethereum/handles/repayment.ethereum.handle';
 import { RepaymentReceiptsConfirmedHandle } from './chains/ethereum/handles/repayment-receipts-confirmed.handle';
@@ -18,7 +18,7 @@ import { RepaymentReceiptsConfirmedHandle } from './chains/ethereum/handles/repa
     EthereumJob,
     EthereumJobByRange,
     TransferSingleEthereumHandle,
-    LoanCreatedEthereumHandle,
+    DealCreatedEthereumHandle,
     InvestedEthereumHandle,
     RepaymentEthereumHandle,
     RepaymentReceiptsConfirmedHandle,

@@ -41,7 +41,7 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "loanWallet",
+        "name": "dealWallet",
         "type": "address"
       },
       {
