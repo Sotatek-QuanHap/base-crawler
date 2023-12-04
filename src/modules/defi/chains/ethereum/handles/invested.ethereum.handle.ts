@@ -15,12 +15,12 @@ export class InvestedEthereumHandle extends TransferSingleBaseHandle {
     this.abi = InvestedAbi;
     this.mappings = [
       { key: 'investor', convert: undefined },
-      { key: 'fund', convert: undefined },
+      { key: 'deal', convert: undefined },
+      { key: 'dealWallet', convert: undefined },
       { key: 'investmentDate', convert: this.toNumber },
       { key: 'amount', convert: this.toNumber },
       { key: 'salt', convert: this.toNumber },
       { key: 'expirationTime', convert: this.toNumber },
-      { key: 'dealWallet', convert: undefined },
       { key: 'investmentHash', convert: undefined },
     ];
     this.logNames = ['Invested'];

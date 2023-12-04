@@ -23,16 +23,10 @@ export class RepaymentReceiptsConfirmed extends BaseSchema {
   txType: number;
 
   @Prop({})
-  redeemedPrincipal: number;
+  principalRepaid: number;
 
   @Prop({})
-  redeemedInterest: number;
-
-  @Prop({})
-  previousTVL: number;
-
-  @Prop({})
-  updatedTVL: number;
+  returnPaid: number;
 }
 
 export const RepaymentReceiptsConfirmedSchema = SchemaFactory.createForClass(

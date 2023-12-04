@@ -11,7 +11,13 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "fund",
+        "name": "deal",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "dealWallet",
         "type": "address"
       },
       {
@@ -37,12 +43,6 @@
         "internalType": "uint256",
         "name": "expirationTime",
         "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "dealWallet",
-        "type": "address"
       },
       {
         "indexed": false,
