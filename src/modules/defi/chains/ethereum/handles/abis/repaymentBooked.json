@@ -23,29 +23,17 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "redeemedPrincipal",
+        "name": "principalRepaid",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "redeemedInterest",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "previousTVL",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "updatedTVL",
+        "name": "returnPaid",
         "type": "uint256"
       }
     ],
-    "name": "RepaymentReceiptsConfirmed",
+    "name": "RepaymentBooked",
     "type": "event"
   }
 ]

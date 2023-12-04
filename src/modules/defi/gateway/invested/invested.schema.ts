@@ -13,7 +13,10 @@ export class Invested extends BaseSchema {
   investor: string;
 
   @Prop({ lowercase: true })
-  fund: string;
+  deal: string;
+
+  @Prop({ lowercase: true })
+  dealWallet: string;
 
   @Prop({})
   investmentDate: number;
@@ -26,9 +29,6 @@ export class Invested extends BaseSchema {
 
   @Prop({})
   expirationTime: number;
-
-  @Prop({ lowercase: true })
-  dealWallet: string;
 
   @Prop({ lowercase: true })
   investmentHash: string;
