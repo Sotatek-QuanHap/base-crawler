@@ -24,8 +24,8 @@ export class Invested extends BaseSchema {
   @Prop({})
   amount: number;
 
-  @Prop({})
-  salt: number;
+  @Prop({ lowercase: true })
+  salt: string;
 
   @Prop({})
   expirationTime: number;

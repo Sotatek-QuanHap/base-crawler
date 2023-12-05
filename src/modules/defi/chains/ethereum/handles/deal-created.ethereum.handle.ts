@@ -18,7 +18,7 @@ export class DealCreatedEthereumHandle extends TransferSingleBaseHandle {
       { key: 'dealWallet', convert: undefined },
       { key: 'dealManager', convert: undefined },
       { key: 'borrower', convert: undefined },
-      { key: 'dbPrjId', convert: this.toNumber },
+      { key: 'dbPrjId', convert: undefined },
     ];
     this.logNames = ['DealCreated'];
   }

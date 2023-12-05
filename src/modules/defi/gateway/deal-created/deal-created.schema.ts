@@ -24,8 +24,8 @@ export class DealCreated extends BaseSchema {
   @Prop({ lowercase: true })
   from: string;
 
-  @Prop({})
-  dbPrjId: number;
+  @Prop({ lowercase: true })
+  dbPrjId: string;
 }
 
 export const DealCreatedSchema = SchemaFactory.createForClass(DealCreated);
