@@ -28,7 +28,7 @@ pipeline {
         sh 'echo $COMMIT_HASH'
         sh 'echo Build started on `date`'
         sh 'echo Building the Docker image...'
-        sh 'printenv > .env'
+        sh 'aws secretsmanager get-secret-value --secret-id qa/helix-crawler | jq -r ".SecretString" | yq -P | sed "s|: |=|g" > .env'
         sh 'docker build -t $REPOSITORY_URI:latest .'
         sh 'docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$COMMIT_HASH'
         sh 'echo Build completed on `date`'
